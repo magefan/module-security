@@ -11,7 +11,7 @@ Fix internal and external vulnerabilities fast with our comprehensive Magento Se
 
 <img  align="right" width="120" height="70" src="https://magefan.com/media/wysiwyg/made_in_ukraine.jpg">
 
-<a href="https://magefan.com/magento-2-product-grid-inline-editor"><img width="190" height="70" src="https://cm.magefan.com/wysiwyg/products/download-magefan-extensions.png"></a></a>
+<a href="https://magefan.com/magento-2-security-extension"><img width="190" height="70" src="https://cm.magefan.com/wysiwyg/products/download-magefan-extensions.png"></a></a>
 
 
 ## Requirements
@@ -23,7 +23,16 @@ Fix internal and external vulnerabilities fast with our comprehensive Magento Se
   * [Change Log](https://magefan.com/magento-2-security-extension/change-log)
   * [FAQs](https://magefan.com/magento-2-security-extension#pattr-faq)
 
-## 🇺🇦 Stand with Ukraine! [How can you help?](https://magefan.com/blog/join-our-donations)
+## Stand with Ukraine! [How can you help?](https://magefan.com/blog/join-our-donations)
+
+## Useful Links
+  * [Sleep Better Knowing Your Store Is Protected](https://github.com/magefan/module-security#sleep-better-knowing-your-store-is-protected)
+  * [Stay Ahead of Threats with a Security Checklist](https://github.com/magefan/module-security#stay-ahead-of-threats-with-a-security-checklist)
+  * [Automatically Scan for Malware and Suspicious Files](https://github.com/magefan/module-security#automatically-scan-for-malware-and-suspicious-files)
+  * [Track Every File Change — In Real Time](https://github.com/magefan/module-security#track-every-file-change--in-real-time)
+  * [Monitor All Admin Actions](https://github.com/magefan/module-security#monitor-all-admin-actions)
+  * [Block Fraudulent Customer Accounts](https://github.com/magefan/module-security#block-fraudulent-customer-accounts)
+  * [Catch Unauthorized Logins Before They Become a Problem](https://github.com/magefan/module-security#catch-unauthorized-logins-before-they-become-a-problem)
 
 ## Features
 ### Sleep Better Knowing Your Store Is Protected
@@ -150,7 +159,7 @@ The code is licensed under [EULA](https://magefan.com/end-user-license-agreement
   * [Magento 2 Google Shopping Feed](https://magefan.com/magento-2-google-shopping-feed-extension)
   * [Magento 2 Google Customer Reviews](https://magefan.com/magento-2-google-customer-reviews)
 
-### [Magento 2 SEO Extensions](https://magefan.com/magento-2-extensions/magento-2-seo-extensions)
+### Magento 2 SEO Extensionshttps://magefan.com/magento-2-extensions/magento-2-seo-extensions
 
   * [Magento 2 SEO Extension](https://magefan.com/magento-2-seo-extension)
   * [Magento 2 Rich Snippets](https://magefan.com/magento-2-rich-snippets)
@@ -172,6 +181,7 @@ The code is licensed under [EULA](https://magefan.com/end-user-license-agreement
   * [Magento 2 Admin Action Log](https://magefan.com/magento-2-admin-action-log)
   * [Magento 2 Order Editor](https://magefan.com/magento-2-edit-order-extension)
   * [Magento 2 Better Order Grid](https://magefan.com/magento-2-better-order-grid-extension)
+  * [Magento 2 Extended Order Grid](https://magefan.com/magento-2-product-grid-inline-editor)
   * [Magento 2 Product Tabs](https://magefan.com/magento-2/extensions/product-tabs)
   * [Magento 2 Facebook Pixel](https://magefan.com/magento-2-facebook-pixel-extension)
   * [Magento 2 Email Attachments](https://magefan.com/magento-2-email-attachments)
@@ -179,7 +189,7 @@ The code is licensed under [EULA](https://magefan.com/end-user-license-agreement
   * [Magento 2 Admin Email Notifications](https://magefan.com/magento-2-admin-email-notifications)
   * [Magento 2 Login As Customer](https://magefan.com/login-as-customer-magento-2-extension)
 
-### [Magento 2 Blog Extensions](https://magefan.com/magento-2-extensions/blog-extensions)
+### Magento 2 Blog Extensions
 
   * [Magento 2 Blog](https://magefan.com/magento2-blog-extension)
   * [Magento 2 Multi Blog](https://magefan.com/magento-2-multi-blog-extension)
