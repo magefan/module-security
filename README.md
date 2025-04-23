@@ -118,10 +118,10 @@ Try out our open demo and if you like our extension **please give us some star o
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://opt.demo.magefan.top/admin/admin/">
+        <a href="https://security.demo.magefan.top/admin/admin/dashboard/">
           <img
             src="https://cs.magefan.com/version1732118579/frontend/Magefan/next/en_US/Magefan_CssOptimizer/images/product-tab-demo-2.jpg"
-            alt="Magneto 2 Extended Product Grid Extension Admin Panel Demo"
+            alt="Magneto 2 Security Extension Admin Panel Demo"
             height="220"
           >
         </a>
@@ -129,7 +129,7 @@ Try out our open demo and if you like our extension **please give us some star o
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://opt.demo.magefan.top/admin/admin/">
+        <a href="https://security.demo.magefan.top/admin/admin/dashboard/">
           Check Now
         </a>
       </td>
