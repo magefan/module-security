@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magefan_Security::elements" title="Security" translate="title" module="Magefan_Security" parent="Magento_Backend::system" sortOrder="70" resource="Magefan_Security::elements" />
+        <add id="Magefan_Security::dashboardpage" title="Dashboard" translate="title" module="Magefan_Security" sortOrder="100" resource="Magefan_Security::dashboardpage" parent="Magefan_Security::elements" action="mfsecurity/security/dashboard"/>
+        <add id="Magefan_Security::config" title="Configuration" translate="title" module="Magefan_Security" sortOrder="200" resource="Magefan_Security::config" parent="Magefan_Security::elements" action="adminhtml/system_config/edit/section/mfsecurity"/>
+    </menu>
+</config>
+

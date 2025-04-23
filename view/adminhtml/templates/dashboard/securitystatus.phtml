@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+/** @var $block \Magefan\Security\Block\Adminhtml\Dashboard\SecurityStatus */
+?>
+
+<div class="horizontal-bar">
+    <div class="dashboard-item-title">
+        <?= $block->escapeHtml(__('Security Status')) ?>
+        <?php if ($block->isEnabled()) { ?>
+            (<a href="<?= $block->escapeUrl($block->getUrl('mfsecurity/security/dashboard')) ?>"><?= $block->escapeHtml(__('View report')) ?></a>)
+        <?php } ?>
+    </div>
+    <?php if ($block->isEnabled()) { ?>
+        <div class="content">
+            <div data-stepped-bar='<?= $block->escapeHtmlAttr($block->getSecurityStatus()) ?>'>
+            </div>
+        </div>
+    <?php } else { ?>
+        <br/>
+        <div class="message message-warning warning">
+            <div data-ui-id="messages-message-warning"><?= __('Magefan Security is disabled. Please enable it in <a href="%1">Stores > Configuration > Magefan Extensions > Security</a>.', $block->getUrl('adminhtml/system_config/edit', ['section' => 'mfsecurity'])) ?></div>
+        </div>
+   <?php } ?>
+</div>

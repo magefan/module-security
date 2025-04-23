@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magefan\Security\Api\SecurityCheckerInterface" type="Magefan\Security\Model\SecurityChecker\AbstractChecker" />
+    <preference for="Magefan\Security\Api\Data\SecurityStatusInterface" type="Magefan\Security\Model\SecurityStatusCache"/>
+    <preference for="Magefan\Security\Api\SecurityCheckerPoolInterface" type="Magefan\Security\Model\SecurityCheckerPool"/>
+    <preference for="Magefan\Security\Api\SecurityCheckerUpdateCacheInterface" type="Magefan\Security\Model\SecurityCheckerUpdateCache"/>
+    <preference for="Magefan\Security\Api\SecurityCheckerListInterface" type="Magefan\Security\Model\SecurityChecker"/>
+    <type name="Magefan\Security\Model\SecurityCheckerPool">
+        <arguments>
+            <argument name="actionPool" xsi:type="array">
+                <item name="CheckAddSecretKeyToURLConfig" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckAddSecretKeyToURLConfig</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckAdminAccountSharingConfig" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckAdminAccountSharingConfig</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckPasswordChangeConfig" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckPasswordChangeConfig</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckAdminFrontNameConfig" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckAdminFrontNameConfig</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckMagentoPermission" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckMagentoPermission</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckExternalPHPFilesInPubFolder" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckExternalPHPFilesInPubFolder</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckMagentoAndPhpVersion" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckMagentoAndPhpVersion</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckArchiveInRootAndSubFolder" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckArchiveInRootAndSubFolder</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckSQLInRootAndSubFolder" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckSQLInRootAndSubFolder</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckFilesAccessFromFrontend" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckFilesAccessFromFrontend</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckRecaptcha" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckRecaptcha</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckTwoFactorAuthentication" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckTwoFactorAuthentication</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckUserPermission" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckUsersPermission</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckMalwareInDB" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckMalwareInDB</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+                <item name="CheckMalwareInFiles" xsi:type="array">
+                    <item name="class" xsi:type="string">\Magefan\Security\Model\SecurityChecker\CheckMalwareInFiles</item>
+                    <item name="position" xsi:type="number">1</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

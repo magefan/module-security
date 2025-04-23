@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Magefan_Security::css/security.css"/>
+        <script src="Magefan_Security::js/bar.js"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magefan\Security\Block\Adminhtml\Dashboard\SecurityStatus"
+                   name="security.alert"
+                   after="analytics_service_external_link"
+                   template="Magefan_Security::dashboard/securitystatus.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

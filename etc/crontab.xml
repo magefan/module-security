@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="mfsecurity">
+        <job name="magefan_security_update" instance="Magefan\Security\Cron\UpdateStatus" method="execute">
+            <schedule>20 3 * * *</schedule>
+        </job>
+    </group>
+</config>

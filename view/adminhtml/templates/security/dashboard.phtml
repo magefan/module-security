@@ -1,0 +1,239 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+?>
+<?php
+use Magefan\Security\Api\SecurityCheckerInterface;
+/** @var $block \Magefan\Security\Block\Adminhtml\Security\Dashboard */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var $mfSecureRenderer \Magefan\Community\Api\SecureHtmlRendererInterface */
+?>
+<?php
+$securityIssues = $block->getSecurityIssues();
+?>
+<div class="chart-container">
+    <div class="page-main-actions-chart">
+        <div>
+            <div class="reload-chart-container">
+                <div class="page-actions">
+                    <div class="page-actions-inner">
+                        <div class="page-actions-buttons">
+
+                            <form class="action-element" action="<?= $escaper->escapeUrl($block->getUrl("mfsecurity/security/reload")) ?>" method="get">
+                                <button class="action-primary" type="submit" title="<?= $escaper->escapeHtml(__('Reload Data')) ?>" onclick="document.body.dispatchEvent(new CustomEvent('processStart'));">
+                                    <?= $escaper->escapeHtml(__('Refresh')) ?>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="chart">
+        <section>
+            <div class="rt-container">
+                <div class="col-rt-12">
+                    <div class="Scriptcontent">
+                        <div class="svg-item">
+                            <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
+                                <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
+                                <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
+                                        stroke-width="3.5"></circle>
+                                <circle class="donut-segment donut-segment-1" cx="20" cy="20" r="15.91549430918954"
+                                        fill="transparent" stroke-width="3.5"
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getCriticalPercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getCriticalPercent() - 100)) ?>"
+                                        stroke-dashoffset="25"></circle>
+                                <g class="donut-text donut-text-1">
+                                    <text y="50%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle"
+                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::CRITICAL)) ?></tspan>
+                                    </text>
+                                    <text y="60%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle" class="donut-data">
+                                            <?= $escaper->escapeHtml(__('Critical')) ?>
+                                        </tspan>
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="svg-item">
+                            <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
+                                <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
+                                <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
+                                        stroke-width="3.5"></circle>
+                                <circle class="donut-segment donut-segment-2" cx="20" cy="20" r="15.91549430918954"
+                                        fill="transparent" stroke-width="3.5"
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getNoticePercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getNoticePercent() - 100)) ?>"
+                                        stroke-dashoffset="25"></circle>
+                                <g class="donut-text donut-text-2">
+                                    <text y="50%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle"
+                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::NOTICE)) ?></tspan>
+                                    </text>
+                                    <text y="60%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle" class="donut-data">
+                                            <?= $escaper->escapeHtml(__('Notice')) ?>
+                                        </tspan>
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="svg-item">
+                            <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
+                                <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
+                                <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
+                                        stroke-width="3.5"></circle>
+                                <circle class="donut-segment donut-segment-3" cx="20" cy="20" r="15.91549430918954"
+                                        fill="transparent" stroke-width="3.5"
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getCantCheckPercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getCantCheckPercent() - 100)) ?>"
+                                        stroke-dashoffset="25"></circle>
+                                <g class="donut-text donut-text-3">
+                                    <text y="50%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle"
+                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::CANT_CHECK)) ?></tspan>
+                                    </text>
+                                    <text y="60%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle" class="donut-data">
+                                            <?= $escaper->escapeHtml(__('Can`t detect. Please Refresh')) ?>
+                                        </tspan>
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="svg-item">
+                            <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
+                                <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
+                                <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
+                                        stroke-width="3.5"></circle>
+                                <circle class="donut-segment donut-segment-4" cx="20" cy="20" r="15.91549430918954"
+                                        fill="transparent" stroke-width="3.5"
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getResolvedPercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getResolvedPercent() - 100)) ?>"
+                                        stroke-dashoffset="25"></circle>
+                                <g class="donut-text donut-text-4">
+                                    <text y="50%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle"
+                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::OK)) ?></tspan>
+                                    </text>
+                                    <text y="60%" transform="translate(0, 2)">
+                                        <tspan x="50%" text-anchor="middle" class="donut-data">
+                                            <?= $escaper->escapeHtml(__('Resolved')) ?>
+                                        </tspan>
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th><?= $escaper->escapeHtml(__('Type')) ?></th>
+        <th><?= $escaper->escapeHtml(__('Security Issue')) ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($securityIssues->getState() as $key => $item) { ?>
+        <tr class="toggle" data-id="<?= $escaper->escapeHtmlAttr($key) ?>" data-code="<?= /*@noEscape*/ $item->getCode() ?>">
+            <td class="indicator">
+                <div class="donut-text-indicator donut-text-<?= $escaper->escapeHtmlAttr($item->getType() ?? SecurityCheckerInterface::CANT_CHECK) ?>">
+                    <span class="type-<?= $escaper->escapeHtmlAttr($item->getType() ?? SecurityCheckerInterface::CANT_CHECK) ?>"></span>
+                </div>
+            </td>
+            <td>
+                <div class="content">
+                    <?= $escaper->escapeHtml($item->getName()) ?>
+                    <span>
+                        <a href="<?= $escaper->escapeUrl($block->getUrl("mfsecurity/security/reload", ['code' => $item->getCode()])) ?>" onclick="document.body.dispatchEvent(new CustomEvent('processStart'));">
+                            <?= $escaper->escapeHtml(__('Refresh')) ?>
+                        </a>
+                    </span>
+                </div>
+                <span class="collapse-button"></span>
+            </td>
+        </tr>
+        <tr id="tr<?= $escaper->escapeHtmlAttr($key) ?>" class="content">
+            <td colspan="2">
+                <div class="detail-wrapper">
+                    <?= /*@noEscape*/ $item->getSuggestions() ?>
+                    <?php if ($item->getDetails() && is_array($item->getDetails())) { ?>
+                        <div class="detail item">
+                            <a href="#" class="view" data-id="<?= $escaper->escapeHtml($key) ?>" data-code="<?= /*@noEscape*/ $item->getCode() ?>">
+                                <?= $escaper->escapeHtml(__('Show details')) ?>
+                            </a>
+                            <span class="detail-wrapper <?= $escaper->escapeHtml($key) ?>">
+
+                                <?= /*@noEscape*/ implode('<br>', $item->getDetails()) ?>
+                            </span>
+                        </div>
+                    <?php } ?>
+                </div>
+            </td>
+        </tr>
+    <?php } ?>
+    </tbody>
+</table>
+<?php $script = "
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function ($, modal) {
+            $(document).ready(function () {
+                $('div.detail.item a.view').on('click', function (aEl) {
+                    let detailId = aEl.target.dataset.id;
+                    let detailCode = aEl.target.dataset.code;
+
+                    const modalContent = $('div.detail.item span.detail-wrapper.' + detailId).clone();
+                     modalContent.modal({
+                        title: '" . $escaper->escapeHtml(__('Security Issue Details')) . "',
+                        innerScroll: true,
+                        modalClass: '_' + detailId,
+                        buttons: [
+                            {
+                                text: 'Close',
+                                class: 'action-close',
+                                click: function () {
+                                    modalContent.modal('closeModal');
+                                    modalContent.remove()
+                                }
+                            }
+                        ]
+                    }).trigger('openModal');
+
+                    document.dispatchEvent(new Event('show_details_' + detailCode));
+                });
+            });
+
+            $('tr.toggle td').on('click', function (element) {
+                let detailId = this.parentElement.dataset.id;
+                $(element.target).closest('tr').find('span.collapse-button').toggleClass('show');
+                $('#tr' + detailId).toggleClass('show');
+            });
+        }
+    );
+    "; ?>
+
+<?= /* @noEscape */ $mfSecureRenderer->renderTag('script', [], $script, false) ?>
+
+<style>
+    span.collapse-button {
+        background: url(<?= $escaper->escapeUrl($block->getViewFileUrl('Magefan_Security/images/expand-hide.svg')) ?>);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    span.collapse-button.show {
+        background: url(<?= $escaper->escapeUrl($block->getViewFileUrl('Magefan_Security/images/expand-more.svg')) ?>);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+</style>

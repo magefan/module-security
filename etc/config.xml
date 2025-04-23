@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mfsecurity>
+            <general>
+                <enabled>0</enabled>
+                <mfmodule>Security</mfmodule>
+                <mftype>1</mftype>
+            </general>
+            <disposable_email_address>
+                <block_disposable_email_enabled>1</block_disposable_email_enabled>
+            </disposable_email_address>
+            <report_about_files_modification>
+                <enabled>0</enabled>
+            </report_about_files_modification>
+        </mfsecurity>
+    </default>
+</config>

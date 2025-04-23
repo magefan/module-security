@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<section id="mfsecurity" sortOrder="10423249090" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <class>separator-top</class>
+            <label>Security</label>
+            <tab>magefan</tab>
+            <resource>Magefan_Security::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General</label>
+                <attribute type="expanded">1</attribute>
+                <field id="version" translate="label comment" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <frontend_model>Magefan\Security\Block\Adminhtml\System\Config\Form\Info</frontend_model>
+                </field>
+                <field id="infoPlus" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\Security\Block\Adminhtml\System\Config\Form\InfoPlus</frontend_model>
+                </field>
+                <field id="infoExtra" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\Security\Block\Adminhtml\System\Config\Form\InfoExtra</frontend_model>
+                </field>
+                <field id="enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Extension</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="key" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Key</label>
+                    <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
+                </field>
+            </group>
+            <group id="disposable_email_address" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Fraudulent Email Address (Extra)</label>
+                <field id="block_disposable_email_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Block Fraudulent (Temporary) Email Addresses</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="disposable_email_domains" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Fraudulent Email Domains</label>
+                    <frontend_model>Magefan\Security\Block\Adminhtml\System\Config\Form\DisposableDomains</frontend_model>
+                </field>
+            </group>
+            <group id="report_about_files_modification" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Report About Files Modification (Extra)</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+	</system>
+</config>
