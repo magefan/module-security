@@ -23,7 +23,7 @@ Fix internal and external vulnerabilities fast with our comprehensive Magento Se
   * [Change Log](https://magefan.com/magento-2-security-extension/change-log)
   * [FAQs](https://magefan.com/magento-2-security-extension#pattr-faq)
 
-## Stand with Ukraine! [How can you help?](https://magefan.com/blog/join-our-donations)
+## 🇺🇦 Stand with Ukraine! [How can you help?](https://magefan.com/blog/join-our-donations)
 
 ## Useful Links
   * [Sleep Better Knowing Your Store Is Protected](https://github.com/magefan/module-security#sleep-better-knowing-your-store-is-protected)
@@ -159,7 +159,7 @@ The code is licensed under [EULA](https://magefan.com/end-user-license-agreement
   * [Magento 2 Google Shopping Feed](https://magefan.com/magento-2-google-shopping-feed-extension)
   * [Magento 2 Google Customer Reviews](https://magefan.com/magento-2-google-customer-reviews)
 
-### Magento 2 SEO Extensionshttps://magefan.com/magento-2-extensions/magento-2-seo-extensions
+### Magento 2 SEO Extensions
 
   * [Magento 2 SEO Extension](https://magefan.com/magento-2-seo-extension)
   * [Magento 2 Rich Snippets](https://magefan.com/magento-2-rich-snippets)
