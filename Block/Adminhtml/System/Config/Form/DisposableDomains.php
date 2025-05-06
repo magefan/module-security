@@ -27,7 +27,7 @@ class DisposableDomains extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function __construct(
         Context $context,
-        SecureHtmlRendererInterface $mfSecureRenderer = null,
+        ?SecureHtmlRendererInterface $mfSecureRenderer = null,
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
