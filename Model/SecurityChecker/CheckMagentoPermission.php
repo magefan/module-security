@@ -131,6 +131,10 @@ class CheckMagentoPermission extends AbstractChecker
         if ($execPhpOutput) {
             $execPhpOutput = explode(PHP_EOL, $execPhpOutput);
             foreach ($execPhpOutput as $item) {
+                if (strpos($item, $magentoDir . '/generated/code') !== false) {
+                    continue;
+                }
+
                 $permissionErrors[] = (string)__('Executable PHP file: %1 (should not have +x)', $item);
             }
         }
