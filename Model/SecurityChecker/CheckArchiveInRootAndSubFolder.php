@@ -99,13 +99,38 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     {
         $rootFolder = $this->directoryList->getRoot();
         $archiveExtensions = ['zip', 'tar', 'gz', 'tgz', 'tar.gz'];
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS));
+        //$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS));
+        $directoryIterator = new \RecursiveDirectoryIterator(
+            $rootFolder,
+            \FilesystemIterator::SKIP_DOTS
+        );
+
+        $filterIterator = new \RecursiveCallbackFilterIterator($directoryIterator, function ($current, $key, $iterator) {
+            // Skip symlinks
+            if ($current->isLink()) {
+                return false;
+            }
+
+            // Skip anything inside pub/media/downloadable
+            $realPath = $current->getRealPath();
+            if (false !== strpos($realPath, '/pub/media/downloadable/')) {
+                return false;
+            }
+            if (false !== strpos($realPath, '/var/log/')) {
+                return false;
+            }
+
+            return true;
+        });
+
+        $iterator = new \RecursiveIteratorIterator($filterIterator);
+
         $archives = [];
 
         foreach ($iterator as $file) {
             if ($file->isFile()) {
                 $fileInfo = $this->file->getPathInfo($file->getPathName());
-                if (isset($fileInfo['extension']) && in_array($fileInfo['extension'], $archiveExtensions)) {
+                if (isset($fileInfo['extension']) && in_array(strtolower($fileInfo['extension'] ?? ''), $archiveExtensions)) {
                     if (!$this->isExcluded($file->getPathname())) {
                         $archives[] = $file->getPathname();
                     }
