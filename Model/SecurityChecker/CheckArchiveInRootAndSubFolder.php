@@ -105,23 +105,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
             \FilesystemIterator::SKIP_DOTS
         );
 
-        $filterIterator = new \RecursiveCallbackFilterIterator($directoryIterator, function ($current, $key, $iterator) {
-            // Skip symlinks
-            if ($current->isLink()) {
-                return false;
-            }
-
-            // Skip anything inside pub/media/downloadable
-            $realPath = $current->getRealPath();
-            if (false !== strpos($realPath, '/pub/media/downloadable/')) {
-                return false;
-            }
-            if (false !== strpos($realPath, '/var/log/')) {
-                return false;
-            }
-
-            return true;
-        });
+        $filterIterator = new \RecursiveCallbackFilterIterator($directoryIterator, [$this, 'filterCallback']);
 
         $iterator = new \RecursiveIteratorIterator($filterIterator);
 
@@ -152,6 +136,31 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         $this->cacheLoaded = false;
 
         return $this;
+    }
+
+    /**
+     * @param mixed $current
+     * @param mixed $key
+     * @param mixed $iterator
+     * @return bool
+     */
+    private function filterCallback($current, $key, $iterator): bool
+    {
+        if ($current->isLink()) {
+            return false;
+        }
+
+        $realPath = $current->getRealPath();
+        $rootFolder = $this->directoryList->getRoot();
+
+        if (
+            strpos($realPath, $rootFolder . '/pub/media/downloadable/') === 0 ||
+            strpos($realPath, $rootFolder . '/var/log/') === 0
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
