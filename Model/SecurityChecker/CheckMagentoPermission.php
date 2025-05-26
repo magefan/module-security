@@ -14,8 +14,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DirectoryList;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use Magento\Framework\Shell;
 
 class CheckMagentoPermission extends AbstractChecker

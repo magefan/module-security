@@ -86,7 +86,7 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     {
         $details = [];
         $currentMagentoVersion = $this->productMetadata->getVersion();
-        $latestMagentoVersion = null;
+        $latestMagentoVersion = 'none';
 
         try {
             $this->curl->addHeader('User-Agent', 'PHP');

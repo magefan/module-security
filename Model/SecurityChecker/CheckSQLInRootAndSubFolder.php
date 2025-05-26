@@ -97,7 +97,16 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     public function updateCache()
     {
         $rootFolder = $this->directoryList->getRoot();
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS));
+        //$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS));
+        $directoryIterator = new \RecursiveDirectoryIterator(
+            $rootFolder,
+            \FilesystemIterator::SKIP_DOTS
+        );
+
+        $filterIterator = new \RecursiveCallbackFilterIterator($directoryIterator, [$this, 'filterCallback']);
+
+        $iterator = new \RecursiveIteratorIterator($filterIterator);
+        
         $sqlPathFiles = [];
 
         foreach ($iterator as $file) {
@@ -123,6 +132,21 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         $this->cacheLoaded = false;
 
         return $this;
+    }
+
+        /**
+     * @param mixed $current
+     * @param mixed $key
+     * @param mixed $iterator
+     * @return bool
+     */
+    private function filterCallback($current, $key, $iterator): bool
+    {
+        if ($current->isLink()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
