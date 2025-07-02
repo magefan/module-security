@@ -72,7 +72,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         File                       $file,
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json                       $json,
-        $position = null
+                                   $position = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
@@ -172,7 +172,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         $result = false;
 
         foreach ($this->exclude as $excludePath) {
-            if (strpos($path, $this->directoryList->getRoot() . '/' . $excludePath) === 0) {
+            if (strpos($path, $excludePath) !== false) {
                 $result = true;
                 break;
             }

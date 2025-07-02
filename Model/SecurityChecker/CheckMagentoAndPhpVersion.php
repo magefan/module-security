@@ -59,7 +59,7 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
         Curl                       $curl,
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json                       $json,
-        $position = null
+                                   $position = null
     ) {
         $this->productMetadata = $productMetadata;
         $this->curl = $curl;
@@ -96,7 +96,10 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
                 $tags = json_decode($response, true);
                 if (json_last_error() == JSON_ERROR_NONE) {
                     foreach ($tags as $key => $tag) {
-                        if (!isset($tag['name']) || (false !== strpos($tag['name'], 'beta'))) {
+                        if (!isset($tag['name']) ||
+                            (false !== strpos($tag['name'], 'alpha')) ||
+                            (false !== strpos($tag['name'], 'beta'))
+                        ) {
                             continue;
                         }
 
