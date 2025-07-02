@@ -56,6 +56,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     private $exclude = [
         'vendor/laminas/laminas-db/',
         'vendor/magento/magento2-base/dev/',
+        'vendor/magento/magento-zf-db',
         'dev/tests/'
     ];
 
@@ -71,7 +72,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         File                       $file,
         Json                       $json,
         SecurityStatusCacheFactory $securityStatusCacheFactory,
-        $position = null
+                                   $position = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
@@ -106,7 +107,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         $filterIterator = new \RecursiveCallbackFilterIterator($directoryIterator, [$this, 'filterCallback']);
 
         $iterator = new \RecursiveIteratorIterator($filterIterator);
-        
+
         $sqlPathFiles = [];
 
         foreach ($iterator as $file) {
@@ -134,7 +135,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         return $this;
     }
 
-        /**
+    /**
      * @param mixed $current
      * @param mixed $key
      * @param mixed $iterator
@@ -158,7 +159,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         $result = false;
 
         foreach ($this->exclude as $excludePath) {
-            if (strpos($path, $this->directoryList->getRoot() . '/' . $excludePath) === 0) {
+            if (strpos($path, $excludePath) !== false) {
                 $result = true;
                 break;
             }
