@@ -54,9 +54,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
      * @var string[]
      */
     private $exclude = [
-        'vendor/laminas/laminas-db/',
-        'vendor/magento/magento2-base/dev/',
-        'vendor/magento/magento-zf-db',
+        'vendor',
         'dev/tests/'
     ];
 
