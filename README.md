@@ -13,11 +13,6 @@ Fix internal and external vulnerabilities fast with our comprehensive Magento Se
 
 <a href="https://magefan.com/magento-2-security-extension"><img width="190" height="70" src="https://cm.magefan.com/wysiwyg/products/download-magefan-extensions.png"></a></a>
 
-
-## Requirements
-  * Magento Community 2.3.0-2.4.x (CE, EE, ECE, B2B)
-  * [Magefan Community Extension](https://github.com/magefan/module-community) >= v2.2.8. Please install this extension first if you use installation via FTP.
-
 ## Useful Links
   * [User Guide](https://magefan.com/magento-2-security-extension/documentation)
   * [Change Log](https://magefan.com/magento-2-security-extension/change-log)
@@ -25,7 +20,19 @@ Fix internal and external vulnerabilities fast with our comprehensive Magento Se
 
 ## 🇺🇦 Stand with Ukraine! [How can you help?](https://magefan.com/blog/join-our-donations)
 
-## Useful Links
+## Requirements
+  * Magento Community 2.3.0-2.4.x (CE, EE, ECE, B2B)
+  * [Magefan Community Extension](https://github.com/magefan/module-community) >= v2.2.8. Please install this extension first if you use installation via FTP.
+
+## Editions & Pricing
+  
+<a href="https://magefan.com/magento-2-security-extension/pricing">
+          <img
+            src="https://cm.magefan.com/wysiwyg/products/security-pricing-plans.png"
+            alt="Pricing for Magento 2 Security Extension" />
+</a>
+
+## Benefits
   * [Sleep Better Knowing Your Store Is Protected](https://github.com/magefan/module-security#sleep-better-knowing-your-store-is-protected)
   * [Stay Ahead of Threats with a Security Checklist](https://github.com/magefan/module-security#stay-ahead-of-threats-with-a-security-checklist)
   * [Automatically Scan for Malware and Suspicious Files](https://github.com/magefan/module-security#automatically-scan-for-malware-and-suspicious-files)
@@ -237,3 +244,4 @@ The code is licensed under [EULA](https://magefan.com/end-user-license-agreement
   * [Shopify Google Indexer](https://magefan.com/shopify/apps/google-indexing)
   * [Shopify Product Feeds](https://magefan.com/shopify/apps/product-feed)
   * [Shopify Server GTM & GA4](https://magefan.com/shopify/apps/gtm-and-ga4)
+
