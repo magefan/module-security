@@ -24,7 +24,7 @@ class CheckUsersPermission extends AbstractChecker
     private $position;
 
     /**
-     * @var
+     * @var array
      */
     protected $details = [];
 
@@ -47,7 +47,7 @@ class CheckUsersPermission extends AbstractChecker
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param CollectionFactory $collectionFactory
      * @param UrlInterface $url
-     * @param null $position
+     * @param mixed $position
      */
     public function __construct(
         SecurityStatusCacheFactory $securityStatusCacheFactory,
@@ -63,6 +63,8 @@ class CheckUsersPermission extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -72,6 +74,8 @@ class CheckUsersPermission extends AbstractChecker
     }
 
     /**
+     * Update cache
+     *
      * @return $this
      * @throws NoSuchEntityException|Exception
      */
@@ -107,6 +111,8 @@ class CheckUsersPermission extends AbstractChecker
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -115,6 +121,8 @@ class CheckUsersPermission extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -123,6 +131,8 @@ class CheckUsersPermission extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -131,6 +141,8 @@ class CheckUsersPermission extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -139,12 +151,20 @@ class CheckUsersPermission extends AbstractChecker
     }
 
     /**
+     * Get suggestion
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Restrict admin permissions to minimize security risks. Go to System > Permissions > User Roles to review and limit permissions. %1', '<a target="_blank" href="' . $this->url->getUrl('adminhtml/user/index') . '">' . __('Change') . '</a>')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__(
+                'Restrict admin permissions to minimize security risks. Go to System > Permissions' .
+                ' > User Roles to review and limit permissions. %1',
+                '<a target="_blank" href="' . $this->url->getUrl('adminhtml/user/index') . '">' .
+                __('Change') .
+                '</a>'
+            )
+            : $this->getResolvedMessage();
     }
 }

@@ -46,6 +46,8 @@ class SecurityChecker implements SecurityCheckerListInterface
     }
 
     /**
+     * Check security pool
+     *
      * @return array
      */
     public function execute(): array

@@ -53,13 +53,17 @@ class Reload extends \Magento\Backend\App\Action
     }
 
     /**
+     * Update security data
+     *
      * @throws Exception
      */
     public function execute()
     {
         if (!$this->config->isEnabled()) {
-            $this->messageManager->addWarningMessage(__('Mage' . 'fan Sec' . 'ur' . 'i' . 'ty' . ' is dis' . 'abled. Plea'
-                . 'se enable it in Stores > Configuration > Mag' . 'efan Extensions > Sec' . 'ur' . 'i' . 'ty.'));
+            $this->messageManager->addWarningMessage(
+                __('Mage' . 'fan Sec' . 'ur' . 'i' . 'ty' . ' is dis' . 'abled. Plea' .
+                    'se enable it in Stores> Configuration > Mag' . 'efan Extensions > Sec' . 'ur' . 'i' . 'ty.')
+            );
         } else {
             $code = $this->_request->getParam('code', null);
             $this->securityCheckerUpdateCache->execute($code);

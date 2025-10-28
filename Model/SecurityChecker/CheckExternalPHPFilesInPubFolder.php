@@ -35,7 +35,7 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     private $position;
 
     /**
-     * @var
+     * @var array
      */
     protected $details = [];
 
@@ -54,7 +54,7 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
      * @param File $file
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
-     * @param $position
+     * @param mixed $position
      */
     public function __construct(
         DirectoryList              $directoryList,
@@ -72,6 +72,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -81,6 +83,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     * Update cache
+     *
      * @return CheckExternalPHPFilesInPubFolder
      * @throws FileSystemException
      */
@@ -117,6 +121,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     *  Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -125,6 +131,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -133,6 +141,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      * @throws FileSystemException
      */
@@ -142,6 +152,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -150,6 +162,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     * Get details
+     *
      * @return array
      */
     public function getDetails(): array
@@ -162,12 +176,14 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
             ? (string)__('Identify suspicious or unknown files that may indicate a security breach.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            : $this->getResolvedMessage();
     }
 }

@@ -19,7 +19,7 @@ class Config
     /**
      * Extension enabled config path
      */
-    const XML_PATH_EXTENSION_ENABLED = 'mfsecurity/general/enabled';
+    public const XML_PATH_EXTENSION_ENABLED = 'mfsecurity/general/enabled';
 
     /**
      * @var ScopeConfigInterface
@@ -37,7 +37,9 @@ class Config
     }
 
     /**
-     * @param $storeId
+     * Check if enabled
+     *
+     * @param mixed $storeId
      * @return bool
      */
     public function isEnabled($storeId = null): bool
@@ -50,8 +52,9 @@ class Config
 
     /**
      * Retrieve store config value
+     *
      * @param string $path
-     * @param null $storeId
+     * @param mixed $storeId
      * @return mixed
      */
     public function getConfig($path, $storeId = null)

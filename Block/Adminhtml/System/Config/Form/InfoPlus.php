@@ -12,6 +12,8 @@ class InfoPlus extends InfoPlan
 {
 
     /**
+     * Get min plan
+     *
      * @return string
      */
     protected function getMinPlan(): string
@@ -20,6 +22,8 @@ class InfoPlus extends InfoPlan
     }
 
     /**
+     * Get sections json
+     *
      * @return string
      */
     protected function getSectionsJson(): string
@@ -30,6 +34,11 @@ class InfoPlus extends InfoPlan
         return $sections;
     }
 
+    /**
+     *  Get text
+     *
+     * @return string
+     */
     protected function getText(): string
     {
         return (string)__("This option is available in <strong>Plus or Extra</strong> plans only.");

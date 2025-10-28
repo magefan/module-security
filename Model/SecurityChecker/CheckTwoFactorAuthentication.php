@@ -16,8 +16,8 @@ use Exception;
 
 class CheckTwoFactorAuthentication extends AbstractChecker
 {
-    const TWO_FACTOR_MODULE_NAME = 'Magento_TwoFactorAuth';
-    const TWO_FACTOR_IMS_MODULE_NAME = 'Magento_AdminAdobeImsTwoFactorAuth';
+    public const TWO_FACTOR_MODULE_NAME = 'Magento_TwoFactorAuth';
+    public const TWO_FACTOR_IMS_MODULE_NAME = 'Magento_AdminAdobeImsTwoFactorAuth';
 
     /**
      * @var ScopeConfigInterface
@@ -48,7 +48,7 @@ class CheckTwoFactorAuthentication extends AbstractChecker
      * @param ScopeConfigInterface $scopeConfig
      * @param ModuleManager $moduleManager
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
-     * @param $position
+     * @param mixed $position
      */
     public function __construct(
         ScopeConfigInterface       $scopeConfig,
@@ -64,6 +64,8 @@ class CheckTwoFactorAuthentication extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -80,14 +82,19 @@ class CheckTwoFactorAuthentication extends AbstractChecker
     }
 
     /**
-     * @return void
+     * Update cache
+     *
+     * @return CheckTwoFactorAuthentication
      * @throws Exception
      */
     public function updateCache()
     {
+        return $this;
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -96,6 +103,8 @@ class CheckTwoFactorAuthentication extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -104,6 +113,8 @@ class CheckTwoFactorAuthentication extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -112,6 +123,8 @@ class CheckTwoFactorAuthentication extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -120,12 +133,15 @@ class CheckTwoFactorAuthentication extends AbstractChecker
     }
 
     /**
+     * Get suggestion
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Add an extra security layer for admin logins. Please enable the"Magento_TwoFactorAuth" and "Magento_AdminAdobeImsTwoFactorAuth" in config.php.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__('Add an extra security layer for admin logins. Please enable ' .
+                ' the"Magento_TwoFactorAuth" and "Magento_AdminAdobeImsTwoFactorAuth" in config.php.')
+            : $this->getResolvedMessage();
     }
 }

@@ -27,6 +27,8 @@ class SecurityCheckerPool implements SecurityCheckerPoolInterface
     }
 
     /**
+     * Get pool
+     *
      * @return array
      */
     public function get(): array
