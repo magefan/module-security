@@ -13,6 +13,10 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 ?>
 <?php
 $securityIssues = $block->getSecurityIssues();
+if (!isset($escaper)) {
+    /* Compatability fix for old Magento versions */
+    $escaper = $block;
+}
 ?>
 <div class="chart-container">
     <div class="page-main-actions-chart">
