@@ -83,7 +83,7 @@ abstract class InfoPlan extends \Magefan\Community\Block\Adminhtml\System\Config
                                             text: "Upgrade Plan Now",
                                             class: "action primary accept",
                                             click: function () {
-                                                window.open("https://magefan.com/magento-2-extensions");
+                                                window.open("https://magefan.com/magento-2-security-extension/pricing?utm_source=admin&utm_medium=config&utm_campaign=upgrade-popup");
                                             }
                                         }]
                                     });
