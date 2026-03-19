@@ -14,7 +14,8 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
-use DirectoryIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class CheckExternalPHPFilesInPubFolder extends AbstractChecker
 {
@@ -91,16 +92,43 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     public function updateCache()
     {
         $allowedPubFiles = ['cron.php', 'get.php', 'health_check.php', 'index.php', 'static.php'];
+        $allowedPubSubfolderFiles = [
+            'errors/404.php',
+            'errors/503.php',
+            'errors/noCache.php',
+            'errors/processor.php',
+            'errors/processorFactory.php',
+            'errors/report.php',
+        ];
         $pubFolder = $this->directoryList->getPath('pub');
         $externalFiles = [];
 
-        foreach (new DirectoryIterator($pubFolder) as $file) {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($pubFolder, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $file) {
+            if (!$file->isFile()) {
+                continue;
+            }
+
             $fileInfo = $this->file->getPathInfo($file->getPathName());
 
-            if ($file->isFile() && isset($fileInfo['extension']) && ($fileInfo['extension'] == "php")) {
+            if (!isset($fileInfo['extension']) || $fileInfo['extension'] !== 'php') {
+                continue;
+            }
+
+            $relativePath = ltrim(str_replace($pubFolder, '', $file->getPathName()), '/\\');
+
+            if ($iterator->getDepth() === 0) {
+                // Files directly in pub/ are checked against the root allowed list
                 if (!in_array($file->getFileName(), $allowedPubFiles)) {
-                    $externalFiles[] = $file->getFileName();
+                    $externalFiles[] = $relativePath;
                 }
+            } elseif (!in_array($relativePath, $allowedPubSubfolderFiles)) {
+                // PHP files in subdirectories are flagged unless they are default Magento files
+                $externalFiles[] = $relativePath;
             }
         }
 
