@@ -56,7 +56,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     private $exclude = [
         'vendor/laminas/laminas-db/',
         'vendor/magento/magento2-base/dev/',
-        'dev/tests/'
+        'dev/tests/',
+        'vendor/magento/magento-zf-db/.laminas-ci/mysql_permissions.sql'
     ];
 
     /**
