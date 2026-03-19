@@ -1,47 +1,72 @@
-# [Magento 2 Security Extension](https://magefan.com/magento-2-security-extension) by Magefan
+# [Magento 2 Security Extension](https://magefan.com/magento-2-security-extension) Free |  Security Check
 
 [![Total Downloads](https://poser.pugx.org/magefan/module-security/downloads)](https://packagist.org/packages/magefan/module-security)
 [![Latest Stable Version](https://poser.pugx.org/magefan/module-security/v/stable)](https://packagist.org/packages/magefan/module-security)
 
 <img align="right" width="120" height="120" src="https://cm.magefan.com/mf_webp/jpg/media/catalog/product/cache/a1683bce6f623be8eb25d859e5ca6d6f/i/c/icon-security.webp">
 
-[Magento 2 Security Extension](https://magefan.com/magento-2-security-extension) is a solution that defends you against hackers, spammers, and data breaches. Instantly detect suspicious logins, track every change in your admin panel, and get alerts about unauthorised file modifications — all from one powerful toolkit.
+[Magento 2 Security Extension](https://magefan.com/magento-2-security-extension) Free is a security checker for Magento that helps you identify and fix security issues in your store before they can be exploited. It scans your Magento system (database and backend), detects vulnerabilities, and provides actionable tips on how to improve security.
 
-Fix internal and external vulnerabilities fast with our comprehensive Magento Security Checklist and give your customers the secure shopping experience they deserve.
+From weak password settings to malware and maulisius files in the system, the extension helps to make sure your store follows [Magento security best practices](https://magefan.com/blog/magento-security) without requiring an ongoing developer assitance.
 
-<img  align="right" width="120" height="70" src="https://magefan.com/media/wysiwyg/made_in_ukraine.jpg">
+Monitor your security and protect your store, data, and customers from potential risks.
 
-<a href="https://magefan.com/magento-2-security-extension"><img width="190" height="70" src="https://cm.magefan.com/wysiwyg/products/download-magefan-extensions.png"></a></a>
+<a href="https://magefan.com/blog/join-our-donations"><img  align="right" width="120" height="70" src="https://magefan.com/media/wysiwyg/made_in_ukraine.jpg"></a>
 
-## Useful Links
-  * [User Guide](https://magefan.com/magento-2-security-extension/documentation)
-  * [Change Log](https://magefan.com/magento-2-security-extension/change-log)
-  * [FAQs](https://magefan.com/magento-2-security-extension#pattr-faq)
+<a href="https://magefan.com/magento-2-security-extension" title="Magento 2 Security Extension"><img width="190" height="70" src="https://cm.magefan.com/mf_webp/png/media/wysiwyg/products/download-magefan-extensions.webp"></a></a>
 
-## 🇺🇦 Stand with Ukraine! [How can you help?](https://magefan.com/blog/join-our-donations)
+___
+TL;DR:
+Magefan Security Extension for Magento continuously scans your store for security vulnerabilities (both in backend and database), detects weak configurations and provides a complete security checklist and recommendations on how to improve secuirty. 
 
-## Requirements
-  * Magento Community 2.3.0-2.4.x (CE, EE, ECE, B2B)
-  * [Magefan Community Extension](https://github.com/magefan/module-community) >= v2.2.8. Please install this extension first if you use installation via FTP.
+It helps you protect your Magento store from brute force attacks, unathorised logins and admin actions and multiple other security threads.
 
-## Editions & Pricing
-  
-<a href="https://magefan.com/magento-2-security-extension/pricing">
-          <img
-            src="https://cm.magefan.com/wysiwyg/products/security-pricing-plans.png"
-            alt="Pricing for Magento 2 Security Extension" />
-</a>
+## What is Magento 2 Security and why does it matter?
 
-## Benefits
-  * [Sleep Better Knowing Your Store Is Protected](https://github.com/magefan/module-security#sleep-better-knowing-your-store-is-protected)
-  * [Stay Ahead of Threats with a Security Checklist](https://github.com/magefan/module-security#stay-ahead-of-threats-with-a-security-checklist)
-  * [Automatically Scan for Malware and Suspicious Files](https://github.com/magefan/module-security#automatically-scan-for-malware-and-suspicious-files)
-  * [Track Every File Change — In Real Time](https://github.com/magefan/module-security#track-every-file-change--in-real-time)
-  * [Monitor All Admin Actions](https://github.com/magefan/module-security#monitor-all-admin-actions)
-  * [Block Fraudulent Customer Accounts](https://github.com/magefan/module-security#block-fraudulent-customer-accounts)
-  * [Catch Unauthorized Logins Before They Become a Problem](https://github.com/magefan/module-security#catch-unauthorized-logins-before-they-become-a-problem)
+Magento 2 security comprises a set of settings that protect your store from unauthorised login attempts, data leaks, malware, and system vulnerabilities.
 
-## Features
+Since Magento stores handle sensitive customer, login and payment data, proper security measures are required to protects this data can be exposed or exploited.
+
+However, Magento security is not just about preventing attacks — it’s about continuously maintaining trust and compliance.
+
+## Why Magento stores are vulnerable without a proper Security Extension?
+
+Magento is a complex, powerful platform which depends heavily on configuraions and maintenance when it comes to security.
+
+Common [Magento security issues](https://magefan.com/blog/magento-security-issues) include:
+
+* Default or weak admin settings
+* Exposed admin panel URLs
+* Missing two-factor authentication
+* Incorrect file permissions
+* Outdated Magento or PHP versions
+* Shared admin accounts
+
+Many of these issues are not visible until there's a problem. Regular security monitoring and checks are essential to keep  Magento secure.
+
+That's why merchants need Magento 2 Security Extension since it identifies these risks early and provides recommendations on how to fix them.
+
+## Features of Magento 2 Security Extension
+
+Magefan Security Extension for Magento offers an advanced security layer for your store through a variety of features:
+
+* Magento security scan for database and backend
+* Detection of common Magento vulnerabilities
+* Admin panel protection checks
+* Two-factor authentication status monitoring
+* File and folder permission verification
+* File changes and uploads monitoring
+* Detection of insecure settings and configurations
+* Magento and PHP version checks
+* Malware detection in files and database
+* Admin user activity and permissions review
+* Admin changes monitoring and logs
+* Fake customer email blocker
+* Security recommendations and alerts
+* Multi-store compatibility
+* No core file modifications
+
+## Benefist of the Security Extension for Magento
 ### Sleep Better Knowing Your Store Is Protected
 
 Even with regular Adobe security patches, new vulnerabilities surface every day. Hackers are persistent — but so are we.
@@ -112,10 +137,44 @@ With this visibility, you can shut down brute-force attacks before they gain tra
   <img width="700" height="349" src="https://cm.magefan.com/mf_webp/png/media/wysiwyg/products/security/magento-admin-login-log.webp">
 </p>
 
+## Frequently asked questions about Magento 2 Security?
+
+### What are the most common security issues in Magento?
+
+Common Magento security issues include weak admin passwords, exposed admin URLs, outdated Magento versions, weak file permissions, and missing two-factor authentication.
+
+### How can I check if my Magento 2 store is secure?
+
+Navigate to System > Security > Security Dashboard by Magefan and review all security issues. They should be marked as resolved. If you find any critical issues or security notices, fix them.
+
+### How often should Magento security checks be performed?
+
+You should run Magento 2 security check regularly, especially after updates, any changes in the settings, or installing new extensions.
+
+### Can Magento stores be hacked even with default security settings?
+
+Yes. Default security settings are not always enough since attackers often exploit overlooked configurations or outdated elements. That's why it's important to monitor Magento security constantly.
+
+## Pricing for the Magento Security Module
+Magento 2 Security Module by Magefan is available in three different plans designed for different security requirements and store sizes.
+
+Each plan includes security scanning tools, vulnerability detection, admin action and login trackers and actionable recommendations to help improve Magento security.
+
+The extension is easy to install and provides immediate insights into your store’s security status.
+  
+<a href="https://magefan.com/magento-2-security-extension/pricing">
+          <img
+            src="https://cm.magefan.com/wysiwyg/products/security-pricing-plans.png"
+            alt="Pricing for Magento 2 Security Extension" />
+</a>
+
+## Requirements
+  * Magento Community 2.3.0-2.4.x (CE, EE, ECE, B2B)
+  * [Magefan Community Extension](https://github.com/magefan/module-community) >= v2.2.8. Please install this extension first if you use installation via FTP.
 
 ## Demo
 
-Try out our open demo and if you like our extension **please give us some star on Github ★**
+Try out our open Magento Security Extension demo, and if you like it ** give us some stars on Github ★**
 <table>
   <tbody>
     <tr>
