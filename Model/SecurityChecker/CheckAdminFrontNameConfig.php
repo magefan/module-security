@@ -39,7 +39,7 @@ class CheckAdminFrontNameConfig extends AbstractChecker
     /**
      * @param AreaList $areaList
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
-     * @param $position
+     * @param mixed $position
      */
     public function __construct(
         AreaList                   $areaList,
@@ -53,6 +53,8 @@ class CheckAdminFrontNameConfig extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -67,14 +69,19 @@ class CheckAdminFrontNameConfig extends AbstractChecker
     }
 
     /**
-     * @return void
+     * Update cache
+     *
+     * @return CheckAdminFrontNameConfig
      * @throws Exception
      */
     public function updateCache()
     {
+        return $this;
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -83,6 +90,8 @@ class CheckAdminFrontNameConfig extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -91,6 +100,8 @@ class CheckAdminFrontNameConfig extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -99,6 +110,8 @@ class CheckAdminFrontNameConfig extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -107,12 +120,20 @@ class CheckAdminFrontNameConfig extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Reduce brute-force attacks by changing the default "admin" path in app/etc/env.php file > change ‘frontName’ value. %1.', '<a target="_blank" href="https://magefan.com/blog/magento-change-admin-url">' .__('Reed more'). '</a>')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__(
+                'Reduce brute-force attacks by changing the default "admin" path in app/etc/env.php' .
+                ' file > change ‘frontName’ value. %1.',
+                '<a target="_blank" href="https://magefan.com/blog/magento-change-admin-url">' .
+                __('Reed more').
+                '</a>'
+            )
+            : $this->getResolvedMessage();
     }
 }

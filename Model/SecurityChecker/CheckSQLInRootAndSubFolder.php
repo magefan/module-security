@@ -36,7 +36,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     private $position;
 
     /**
-     * @var
+     * @var array
      */
     protected $details = [];
 
@@ -64,7 +64,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
      * @param File $file
      * @param Json $json
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
-     * @param $position
+     * @param mixed $position
      */
     public function __construct(
         DirectoryList              $directoryList,
@@ -82,6 +82,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -91,13 +93,17 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Update cache
+     *
      * @return CheckSQLInRootAndSubFolder
      * @throws Exception
      */
     public function updateCache()
     {
         $rootFolder = $this->directoryList->getRoot();
-        //$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS));
+/*        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS)
+        );*/
         $directoryIterator = new \RecursiveDirectoryIterator(
             $rootFolder,
             \FilesystemIterator::SKIP_DOTS
@@ -106,7 +112,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         $filterIterator = new \RecursiveCallbackFilterIterator($directoryIterator, [$this, 'filterCallback']);
 
         $iterator = new \RecursiveIteratorIterator($filterIterator);
-        
+
         $sqlPathFiles = [];
 
         foreach ($iterator as $file) {
@@ -134,7 +140,9 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         return $this;
     }
 
-        /**
+    /**
+     * Filter
+     *
      * @param mixed $current
      * @param mixed $key
      * @param mixed $iterator
@@ -150,6 +158,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Check if excluded
+     *
      * @param string $path
      * @return bool
      */
@@ -168,6 +178,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -176,6 +188,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -184,6 +198,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -192,6 +208,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -200,6 +218,8 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get details
+     *
      * @return array
      */
     public function getDetails(): array
@@ -212,12 +232,15 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Prevent database leaks by ensuring SQL backups are not publicly accessible. Remove SQL files from public directories.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__('Prevent database leaks by ensuring SQL backups are not publicly accessible. ' .
+                ' Remove SQL files from public directories.')
+            : $this->getResolvedMessage();
     }
 }

@@ -11,6 +11,8 @@ namespace Magefan\Security\Api;
 interface SecurityCheckerPoolInterface
 {
     /**
+     * Get pool
+     *
      * @return array
      */
     public function get(): array;

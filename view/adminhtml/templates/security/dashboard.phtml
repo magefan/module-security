@@ -6,12 +6,17 @@
 ?>
 <?php
 use Magefan\Security\Api\SecurityCheckerInterface;
+
 /** @var $block \Magefan\Security\Block\Adminhtml\Security\Dashboard */
-/** @var \Magento\Framework\Escaper $escaper */
+/** @var $escaper \Magento\Framework\Escaper */
 /** @var $mfSecureRenderer \Magefan\Community\Api\SecureHtmlRendererInterface */
 ?>
 <?php
 $securityIssues = $block->getSecurityIssues();
+if (!isset($escaper)) {
+    /* Compatability fix for old Magento versions */
+    $escaper = $block;
+}
 ?>
 <div class="chart-container">
     <div class="page-main-actions-chart">
@@ -21,8 +26,16 @@ $securityIssues = $block->getSecurityIssues();
                     <div class="page-actions-inner">
                         <div class="page-actions-buttons">
 
-                            <form class="action-element" action="<?= $escaper->escapeUrl($block->getUrl("mfsecurity/security/reload")) ?>" method="get">
-                                <button class="action-primary" type="submit" title="<?= $escaper->escapeHtml(__('Reload Data')) ?>" onclick="document.body.dispatchEvent(new CustomEvent('processStart'));">
+                            <form
+                                class="action-element"
+                                action="<?= $escaper->escapeUrl($block->getUrl("mfsecurity/security/reload")) ?>"
+                                method="get"
+                            >
+                                <button
+                                    class="action-primary"
+                                    type="submit" title="<?= $escaper->escapeHtml(__('Reload Data')) ?>"
+                                    onclick="document.body.dispatchEvent(new CustomEvent('processStart'));"
+                                >
                                     <?= $escaper->escapeHtml(__('Refresh')) ?>
                                 </button>
                             </form>
@@ -37,18 +50,25 @@ $securityIssues = $block->getSecurityIssues();
                 <div class="col-rt-12">
                     <div class="Scriptcontent">
                         <div class="svg-item">
+                            <?php
+                                $criticalPercent = $securityIssues->getCriticalPercent();
+                                $criticalPercent2 = $securityIssues->getData(SecurityCheckerInterface::CRITICAL);
+                            ?>
                             <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
                                 <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
                                 <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
                                         stroke-width="3.5"></circle>
                                 <circle class="donut-segment donut-segment-1" cx="20" cy="20" r="15.91549430918954"
                                         fill="transparent" stroke-width="3.5"
-                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getCriticalPercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getCriticalPercent() - 100)) ?>"
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($criticalPercent) ?>
+                                            <?= $escaper->escapeHtmlAttr(abs($criticalPercent - 100)) ?>
+                                        "
                                         stroke-dashoffset="25"></circle>
                                 <g class="donut-text donut-text-1">
                                     <text y="50%" transform="translate(0, 2)">
                                         <tspan x="50%" text-anchor="middle"
-                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::CRITICAL)) ?></tspan>
+                                               class="donut-percent"><?= $escaper->escapeHtml($criticalPercent2) ?>
+                                        </tspan>
                                     </text>
                                     <text y="60%" transform="translate(0, 2)">
                                         <tspan x="50%" text-anchor="middle" class="donut-data">
@@ -59,18 +79,25 @@ $securityIssues = $block->getSecurityIssues();
                             </svg>
                         </div>
                         <div class="svg-item">
+                            <?php
+                                $noticePercent = $securityIssues->getNoticePercent();
+                                $noticePercent2 = $securityIssues->getData(SecurityCheckerInterface::NOTICE);
+                            ?>
                             <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
                                 <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
                                 <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
                                         stroke-width="3.5"></circle>
                                 <circle class="donut-segment donut-segment-2" cx="20" cy="20" r="15.91549430918954"
                                         fill="transparent" stroke-width="3.5"
-                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getNoticePercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getNoticePercent() - 100)) ?>"
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($noticePercent) ?>
+                                            <?= $escaper->escapeHtmlAttr(abs($noticePercent - 100)) ?>
+                                        "
                                         stroke-dashoffset="25"></circle>
                                 <g class="donut-text donut-text-2">
                                     <text y="50%" transform="translate(0, 2)">
                                         <tspan x="50%" text-anchor="middle"
-                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::NOTICE)) ?></tspan>
+                                               class="donut-percent"><?= $escaper->escapeHtml($noticePercent2) ?>
+                                        </tspan>
                                     </text>
                                     <text y="60%" transform="translate(0, 2)">
                                         <tspan x="50%" text-anchor="middle" class="donut-data">
@@ -81,18 +108,26 @@ $securityIssues = $block->getSecurityIssues();
                             </svg>
                         </div>
                         <div class="svg-item">
+                            <?php
+                                $cantCheckPercent = $securityIssues->getCantCheckPercent();
+                            ?>
                             <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
                                 <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
                                 <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
                                         stroke-width="3.5"></circle>
                                 <circle class="donut-segment donut-segment-3" cx="20" cy="20" r="15.91549430918954"
                                         fill="transparent" stroke-width="3.5"
-                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getCantCheckPercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getCantCheckPercent() - 100)) ?>"
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($cantCheckPercent) ?>
+                                            <?= $escaper->escapeHtmlAttr(abs($cantCheckPercent - 100)) ?>
+                                        "
                                         stroke-dashoffset="25"></circle>
                                 <g class="donut-text donut-text-3">
                                     <text y="50%" transform="translate(0, 2)">
                                         <tspan x="50%" text-anchor="middle"
-                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::CANT_CHECK)) ?></tspan>
+                                               class="donut-percent"><?= $escaper->escapeHtml(
+                                                   $securityIssues->getData(SecurityCheckerInterface::CANT_CHECK)
+                                               ) ?>
+                                        </tspan>
                                     </text>
                                     <text y="60%" transform="translate(0, 2)">
                                         <tspan x="50%" text-anchor="middle" class="donut-data">
@@ -103,18 +138,27 @@ $securityIssues = $block->getSecurityIssues();
                             </svg>
                         </div>
                         <div class="svg-item">
+                            <?php
+                                $resolvedPercent = $securityIssues->getResolvedPercent();
+                            ?>
                             <svg width="100%" height="100%" viewBox="0 0 40 40" class="donut">
                                 <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954" fill="#fff"></circle>
                                 <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954" fill="transparent"
                                         stroke-width="3.5"></circle>
                                 <circle class="donut-segment donut-segment-4" cx="20" cy="20" r="15.91549430918954"
                                         fill="transparent" stroke-width="3.5"
-                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($securityIssues->getResolvedPercent()) ?> <?= $escaper->escapeHtmlAttr(abs($securityIssues->getResolvedPercent() - 100)) ?>"
-                                        stroke-dashoffset="25"></circle>
+                                        stroke-dasharray="<?= $escaper->escapeHtmlAttr($resolvedPercent) ?>
+                                            <?= $escaper->escapeHtmlAttr(abs($resolvedPercent - 100)) ?>"
+                                        stroke-dashoffset="25"
+                                ></circle>
                                 <g class="donut-text donut-text-4">
                                     <text y="50%" transform="translate(0, 2)">
+                                        <?php
+                                            $statusOk = $securityIssues->getData(SecurityCheckerInterface::OK);
+                                        ?>
                                         <tspan x="50%" text-anchor="middle"
-                                               class="donut-percent"><?= $escaper->escapeHtml($securityIssues->getData(SecurityCheckerInterface::OK)) ?></tspan>
+                                               class="donut-percent"><?= $escaper->escapeHtml($statusOk) ?>
+                                        </tspan>
                                     </text>
                                     <text y="60%" transform="translate(0, 2)">
                                         <tspan x="50%" text-anchor="middle" class="donut-data">
@@ -139,17 +183,29 @@ $securityIssues = $block->getSecurityIssues();
     </thead>
     <tbody>
     <?php foreach ($securityIssues->getState() as $key => $item) { ?>
-        <tr class="toggle" data-id="<?= $escaper->escapeHtmlAttr($key) ?>" data-code="<?= /*@noEscape*/ $item->getCode() ?>">
+        <tr
+            class="toggle"
+            data-id="<?= $escaper->escapeHtmlAttr($key) ?>"
+            data-code="<?= /*@noEscape*/ $item->getCode() ?>"
+        >
             <td class="indicator">
-                <div class="donut-text-indicator donut-text-<?= $escaper->escapeHtmlAttr($item->getType() ?? SecurityCheckerInterface::CANT_CHECK) ?>">
-                    <span class="type-<?= $escaper->escapeHtmlAttr($item->getType() ?? SecurityCheckerInterface::CANT_CHECK) ?>"></span>
+                <?php
+                    $type = $item->getType() ?? SecurityCheckerInterface::CANT_CHECK;
+                ?>
+                <div class="donut-text-indicator donut-text-<?= $escaper->escapeHtmlAttr($type) ?>">
+                    <span class="type-<?= $escaper->escapeHtmlAttr($type) ?>"></span>
                 </div>
             </td>
             <td>
                 <div class="content">
                     <?= $escaper->escapeHtml($item->getName()) ?>
                     <span>
-                        <a href="<?= $escaper->escapeUrl($block->getUrl("mfsecurity/security/reload", ['code' => $item->getCode()])) ?>" onclick="document.body.dispatchEvent(new CustomEvent('processStart'));">
+                        <?php
+                            $urlReload = $block->getUrl("mfsecurity/security/reload", ['code' => $item->getCode()]);
+                        ?>
+                        <a href="<?= $escaper->escapeUrl($urlReload) ?>"
+                           onclick="document.body.dispatchEvent(new CustomEvent('processStart'));"
+                        >
                             <?= $escaper->escapeHtml(__('Refresh')) ?>
                         </a>
                     </span>
@@ -163,7 +219,12 @@ $securityIssues = $block->getSecurityIssues();
                     <?= /*@noEscape*/ $item->getSuggestions() ?>
                     <?php if ($item->getDetails() && is_array($item->getDetails())) { ?>
                         <div class="detail item">
-                            <a href="#" class="view" data-id="<?= $escaper->escapeHtml($key) ?>" data-code="<?= /*@noEscape*/ $item->getCode() ?>">
+                            <a
+                                href="#"
+                                class="view"
+                                data-id="<?= $escaper->escapeHtml($key) ?>"
+                                data-code="<?= /*@noEscape*/ $item->getCode() ?>"
+                            >
                                 <?= $escaper->escapeHtml(__('Show details')) ?>
                             </a>
                             <span class="detail-wrapper <?= $escaper->escapeHtml($key) ?>">

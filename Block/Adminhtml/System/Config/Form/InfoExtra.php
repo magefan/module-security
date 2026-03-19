@@ -12,6 +12,8 @@ class InfoExtra extends InfoPlan
 {
 
     /**
+     * Get min plan
+     *
      * @return string
      */
     protected function getMinPlan(): string
@@ -20,6 +22,8 @@ class InfoExtra extends InfoPlan
     }
 
     /**
+     * Get section json
+     *
      * @return string
      */
     protected function getSectionsJson(): string
@@ -31,6 +35,8 @@ class InfoExtra extends InfoPlan
     }
 
     /**
+     * Get text
+     *
      * @return string
      */
     protected function getText(): string

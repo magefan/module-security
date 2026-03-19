@@ -13,7 +13,7 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 
 abstract class AbstractChecker implements SecurityCheckerInterface
 {
-    const RESOLVED_MESSAGE = 'Resolved.';
+    public const RESOLVED_MESSAGE = 'Resolved.';
 
     /**
      * @var SecurityStatusCacheFactory
@@ -31,7 +31,7 @@ abstract class AbstractChecker implements SecurityCheckerInterface
     protected $issueExists = SecurityCheckerInterface::CANT_CHECK;
 
     /**
-     * @var string
+     * @var array
      */
     protected $details = [];
 
@@ -45,6 +45,8 @@ abstract class AbstractChecker implements SecurityCheckerInterface
     }
 
     /**
+     * Load cache
+     *
      * @return $this
      */
     public function loadCache()
@@ -62,21 +64,29 @@ abstract class AbstractChecker implements SecurityCheckerInterface
     }
 
     /**
+     * Update cache
+     *
      * @return mixed
      */
     abstract public function updateCache();
 
     /**
+     * Get status code
+     *
      * @return mixed
      */
     abstract public function getCode(): string;
 
     /**
+     * Get name
+     *
      * @return string
      */
     abstract public function getName(): string;
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -85,6 +95,8 @@ abstract class AbstractChecker implements SecurityCheckerInterface
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -93,6 +105,8 @@ abstract class AbstractChecker implements SecurityCheckerInterface
     }
 
     /**
+     * Get total records
+     *
      * @return int
      */
     public function getTotal(): int
@@ -101,6 +115,8 @@ abstract class AbstractChecker implements SecurityCheckerInterface
     }
 
     /**
+     * Get details
+     *
      * @return array
      */
     public function getDetails(): array
@@ -109,10 +125,22 @@ abstract class AbstractChecker implements SecurityCheckerInterface
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return '';
+    }
+
+    /**
+     * Get resolved text
+     *
+     * @return string
+     */
+    public function getResolvedMessage(): string
+    {
+        return (string)__('Resolved.');
     }
 }

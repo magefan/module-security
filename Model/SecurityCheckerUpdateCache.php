@@ -39,6 +39,9 @@ class SecurityCheckerUpdateCache implements SecurityCheckerUpdateCacheInterface
     }
 
     /**
+     * Update cache
+     *
+     * @param string $code
      * @return void
      * @throws Exception
      */

@@ -54,13 +54,14 @@ class Dashboard extends \Magento\Backend\App\Action
         $resultPage->getConfig()->getTitle()->prepend(__("Security Dashboard by Magefan"));
 
         if (!$this->config->isEnabled()) {
-            $this->messageManager->addWarningMessage(__('Mage' . 'fan Sec' . 'ur' . 'i' . 'ty' . ' is dis' . 'abled. Plea'
-                . 'se enable it in Stores > Configuration > Mag' . 'efan Extensions > Sec' . 'ur' . 'i' . 'ty.'));
+            $this->messageManager->addWarningMessage(
+                __('Mage' . 'fan Sec' . 'ur' . 'i' . 'ty' . ' is dis' . 'abled. Plea'
+                . 'se enable it in Stores > Configuration > Mag' . 'efan Extensions > Sec' . 'ur' . 'i' . 'ty.')
+            );
 
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             $resultPage->setUrl($this->_redirect->getRedirectUrl('adminhtml/system_config/edit/section/security'));
         }
-
 
         return $resultPage;
     }

@@ -36,7 +36,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     private $position;
 
     /**
-     * @var
+     * @var array
      */
     protected $details = [];
 
@@ -65,7 +65,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
      * @param File $file
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
-     * @param $position
+     * @param mixed $position
      */
     public function __construct(
         DirectoryList              $directoryList,
@@ -83,6 +83,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -92,6 +94,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Update design
+     *
      * @return $this
      * @throws Exception
      */
@@ -99,7 +103,9 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     {
         $rootFolder = $this->directoryList->getRoot();
         $archiveExtensions = ['zip', 'tar', 'gz', 'tgz', 'tar.gz'];
-        //$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS));
+/*        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS)
+        );*/
         $directoryIterator = new \RecursiveDirectoryIterator(
             $rootFolder,
             \FilesystemIterator::SKIP_DOTS
@@ -114,7 +120,9 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         foreach ($iterator as $file) {
             if ($file->isFile()) {
                 $fileInfo = $this->file->getPathInfo($file->getPathName());
-                if (isset($fileInfo['extension']) && in_array(strtolower($fileInfo['extension'] ?? ''), $archiveExtensions)) {
+                if (isset($fileInfo['extension']) &&
+                    in_array(strtolower($fileInfo['extension'] ?? ''), $archiveExtensions)
+                ) {
                     if (!$this->isExcluded($file->getPathname())) {
                         $archives[] = $file->getPathname();
                     }
@@ -139,6 +147,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Filter
+     *
      * @param mixed $current
      * @param mixed $key
      * @param mixed $iterator
@@ -153,8 +163,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         $realPath = $current->getRealPath();
         $rootFolder = $this->directoryList->getRoot();
 
-        if (
-            strpos($realPath, $rootFolder . '/pub/media/downloadable/') === 0 ||
+        if (strpos($realPath, $rootFolder . '/pub/media/downloadable/') === 0 ||
             strpos($realPath, $rootFolder . '/var/log/') === 0
         ) {
             return false;
@@ -164,6 +173,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Check if excluded
+     *
      * @param string $path
      * @return bool
      */
@@ -182,6 +193,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -190,6 +203,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -198,6 +213,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -206,6 +223,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -214,6 +233,8 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get details
+     *
      * @return array
      */
     public function getDetails(): array
@@ -226,12 +247,14 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     }
 
     /**
+     * Get suggestion
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
             ? (string)__('Remove sensitive backup files that attackers can access. Move them to another location.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            : $this->getResolvedMessage();
     }
 }

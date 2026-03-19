@@ -37,6 +37,8 @@ class Dashboard extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get issues
+     *
      * @return DataObject
      */
     public function getSecurityIssues()
@@ -45,7 +47,9 @@ class Dashboard extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @param $securityStates
+     * Sort
+     *
+     * @param array $securityStates
      * @return DataObject
      */
     public function sort($securityStates)
@@ -80,10 +84,22 @@ class Dashboard extends \Magento\Backend\Block\Template
             $state->getData(SecurityCheckerInterface::OK);
 
         if ($totalIssues != 0) {
-            $state->setData('critical_percent', ($state->getData(SecurityCheckerInterface::CRITICAL) / $totalIssues) * 100);
-            $state->setData('notice_percent', ($state->getData(SecurityCheckerInterface::NOTICE) / $totalIssues) * 100);
-            $state->setData('cant_check_percent', ($state->getData(SecurityCheckerInterface::CANT_CHECK) / $totalIssues) * 100);
-            $state->setData('resolved_percent', ($state->getData(SecurityCheckerInterface::OK) / $totalIssues) * 100);
+            $state->setData(
+                'critical_percent',
+                ($state->getData(SecurityCheckerInterface::CRITICAL) / $totalIssues) * 100
+            );
+            $state->setData(
+                'notice_percent',
+                ($state->getData(SecurityCheckerInterface::NOTICE) / $totalIssues) * 100
+            );
+            $state->setData(
+                'cant_check_percent',
+                ($state->getData(SecurityCheckerInterface::CANT_CHECK) / $totalIssues) * 100
+            );
+            $state->setData(
+                'resolved_percent',
+                ($state->getData(SecurityCheckerInterface::OK) / $totalIssues) * 100
+            );
         }
 
         return $state;
