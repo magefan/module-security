@@ -46,6 +46,8 @@ class SecurityStatus extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Is enabled
+     *
      * @return bool
      */
     public function isEnabled(): bool
@@ -54,6 +56,8 @@ class SecurityStatus extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get security status
+     *
      * @return false|string
      */
     public function getSecurityStatus()
@@ -63,7 +67,9 @@ class SecurityStatus extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @param $securityStates
+     * Sort records
+     *
+     * @param array $securityStates
      * @return false|string
      */
     public function sort($securityStates)

@@ -45,7 +45,7 @@ class CheckRecaptcha extends AbstractChecker
      * @param ScopeConfigInterface $scopeConfig
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param UrlInterface $url
-     * @param null $position
+     * @param mixed $position
      */
     public function __construct(
         ScopeConfigInterface       $scopeConfig,
@@ -61,12 +61,16 @@ class CheckRecaptcha extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
     {
         if (null === $this->issueExists || $this->issueExists === SecurityCheckerInterface::CANT_CHECK) {
-            $isIssueExist = !(bool)$this->scopeConfig->getValue(self::XML_PATH_RECAPTCHA_ADMIN_LOGIN) || !(bool)$this->scopeConfig->getValue(self::XML_PATH_RECAPTCHA_RESET_PASSWORD);
+            $isIssueExist = !(bool)$this->scopeConfig->getValue(self::XML_PATH_RECAPTCHA_ADMIN_LOGIN) ||
+                !(bool)$this->scopeConfig->getValue(self::XML_PATH_RECAPTCHA_RESET_PASSWORD);
+
             $this->issueExists = $isIssueExist ?
                 SecurityCheckerInterface::NOTICE :
                 SecurityCheckerInterface::OK;
@@ -76,14 +80,19 @@ class CheckRecaptcha extends AbstractChecker
     }
 
     /**
-     * @return void
+     * Update cache
+     *
+     * @return CheckRecaptcha
      * @throws Exception
      */
     public function updateCache()
     {
+        return $this;
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -92,6 +101,8 @@ class CheckRecaptcha extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -100,6 +111,8 @@ class CheckRecaptcha extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -108,6 +121,8 @@ class CheckRecaptcha extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return mixed|null
      */
     public function getPosition(): int
@@ -116,12 +131,23 @@ class CheckRecaptcha extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Prevent bot attacks on login and password reset pages. Enable the "Enable for Login" and "Enable for Forgot Password" option in Stores > Configuration > Security > Google reCAPTCHA Admin Panel > Admin Panel. %1', '<a target="_blank" href="' . $this->url->getUrl('adminhtml/system_config/edit/section/recaptcha_backend') . '">' .__('Change'). '</a>.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__(
+                'Prevent bot attacks on login and password reset pages. '
+                . 'Enable the "Enable for Login" and "Enable for Forgot Password" option in '
+                . 'Stores > Configuration > Security > Google reCAPTCHA Admin Panel > Admin Panel. %1',
+                sprintf(
+                    '<a target="_blank" href="%s">%s</a>.',
+                    $this->url->getUrl('adminhtml/system_config/edit/section/recaptcha_backend'),
+                    __('Change')
+                )
+            )
+            : $this->getResolvedMessage();
     }
 }

@@ -45,7 +45,7 @@ class CheckPasswordChangeConfig extends AbstractChecker
      * @param ScopeConfigInterface $scopeConfig
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param UrlInterface $url
-     * @param null $position
+     * @param mixed $position
      */
     public function __construct(
         ScopeConfigInterface       $scopeConfig,
@@ -61,6 +61,8 @@ class CheckPasswordChangeConfig extends AbstractChecker
     }
 
     /**
+     * Check is issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -76,14 +78,19 @@ class CheckPasswordChangeConfig extends AbstractChecker
     }
 
     /**
-     * @return void
+     * Update cache
+     *
+     * @return CheckPasswordChangeConfig
      * @throws Exception
      */
     public function updateCache()
     {
+        return $this;
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -92,6 +99,8 @@ class CheckPasswordChangeConfig extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -100,6 +109,8 @@ class CheckPasswordChangeConfig extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -108,6 +119,8 @@ class CheckPasswordChangeConfig extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -116,12 +129,22 @@ class CheckPasswordChangeConfig extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Require forced password changes. Set the "Password Change" option to "Forced" in Stores > Configuration > Advanced > Admin > Security section. %1', '<a target="_blank" href="' . $this->url->getUrl('adminhtml/system_config/edit/section/admin') . '">' .__('Change'). '</a>.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__(
+                'Require forced password changes. Set the "Password Change" option to "Forced" '.
+                ' in Stores > Configuration > Advanced > Admin > Security section. %1',
+                '<a target="_blank" href="' .
+                $this->url->getUrl('adminhtml/system_config/edit/section/admin') .
+                '">' .
+                    __('Change').
+                '</a>.'
+            )
+            : $this->getResolvedMessage();
     }
 }

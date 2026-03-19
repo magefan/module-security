@@ -11,6 +11,8 @@ namespace Magefan\Security\Api;
 interface SecurityCheckerUpdateCacheInterface
 {
     /**
+     * Update cache
+     *
      * @return mixed
      */
     public function execute();

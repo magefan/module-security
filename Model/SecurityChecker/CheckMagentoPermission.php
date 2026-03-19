@@ -35,7 +35,7 @@ class CheckMagentoPermission extends AbstractChecker
     private $position;
 
     /**
-     * @var
+     * @var array
      */
     protected $details = [];
 
@@ -60,7 +60,7 @@ class CheckMagentoPermission extends AbstractChecker
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
      * @param Shell $shell
-     * @param $position
+     * @param mixed $position
      */
     public function __construct(
         DirectoryList $directoryList,
@@ -80,6 +80,8 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -89,6 +91,8 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Update cache
+     *
      * @return $this
      * @throws FileSystemException
      */
@@ -100,7 +104,8 @@ class CheckMagentoPermission extends AbstractChecker
         /*
         -perm -0002 | Finds files/directories that anyone can write to (critical risk!).
         -perm 0777  | Finds fully open files (worst-case scenario).
-        -perm -111  | Finds .php files with execute (+x) permission, which could indicate a security misconfiguration or webshell risk.
+        -perm -111  | Finds .php files with execute (+x) permission, which could indicate a security misconfiguration
+        or webshell risk.
         */
         $findFiles = "find $magentoDir -type f \\( -perm -0002 -o -perm 0777 \\)";
         $findDirs = "find $magentoDir -type d -perm -0002";
@@ -154,6 +159,8 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -162,6 +169,8 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -170,6 +179,8 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      * @throws FileSystemException
      */
@@ -179,6 +190,8 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -187,6 +200,8 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Get details
+     *
      * @return array
      */
     public function getDetails(): array
@@ -199,12 +214,18 @@ class CheckMagentoPermission extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Prevent unauthorized modifications and access to sensitive files. %1.', '<a target="_blank" href="https://magefan.com/blog/magento-file-system-permissions">' .__('Reed more'). '</a>')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__(
+                'Prevent unauthorized modifications and access to sensitive files. %1.',
+                '<a target="_blank" href="https://magefan.com/blog/magento-file-system-permissions">' .
+                __('Read more') . '</a>'
+            )
+            : $this->getResolvedMessage();
     }
 }

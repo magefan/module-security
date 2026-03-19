@@ -35,7 +35,7 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     private $position;
 
     /**
-     * @var
+     * @var array
      */
     protected $details = [];
 
@@ -54,7 +54,7 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
      * @param Curl $curl
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
-     * @param $position
+     * @param mixed $position
      */
     public function __construct(
         StoreManagerInterface      $storeManager,
@@ -72,6 +72,8 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -81,6 +83,8 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Update cache
+     *
      * @return $this
      * @throws NoSuchEntityException
      */
@@ -119,7 +123,11 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
                 $statusCode = $this->curl->getStatus();
 
                 if ($statusCode === 200) {
-                    $accessibleFoldersAndFiles[] = (string)__('File or directory <strong>%1</strong> is accessible: %2', $file, $fileUrl);
+                    $accessibleFoldersAndFiles[] = (string)__(
+                        'File or directory <strong>%1</strong> is accessible: %2',
+                        $file,
+                        $fileUrl
+                    );
                 }
             } catch (\Exception $e) {
                 continue;
@@ -143,6 +151,8 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -151,6 +161,8 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -159,6 +171,8 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      * @throws NoSuchEntityException
      */
@@ -168,6 +182,8 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -176,6 +192,8 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Get details
+     *
      * @return array
      */
     public function getDetails(): array
@@ -188,12 +206,14 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
             ? (string)__('Block direct access to sensitive files from the frontend.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            : $this->getResolvedMessage();
     }
 }

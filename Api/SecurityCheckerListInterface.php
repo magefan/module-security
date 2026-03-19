@@ -11,6 +11,8 @@ namespace Magefan\Security\Api;
 interface SecurityCheckerListInterface
 {
     /**
+     * Check security
+     *
      * @return array
      */
     public function execute(): array;
