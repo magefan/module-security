@@ -44,7 +44,7 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     protected $json;
 
     /**
-     * @var
+     * @var array
      */
     protected $details = [];
 
@@ -52,7 +52,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
      * @param ProductMetadataInterface $productMetadata
      * @param Curl $curl
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
-     * @param $position
+     * @param Json $json
+     * @param mixed $position
      */
     public function __construct(
         ProductMetadataInterface   $productMetadata,
@@ -70,6 +71,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -79,6 +82,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Update cache
+     *
      * @return $this
      * @throws Exception
      */
@@ -96,7 +101,10 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
                 $tags = json_decode($response, true);
                 if (json_last_error() == JSON_ERROR_NONE) {
                     foreach ($tags as $key => $tag) {
-                        if (!isset($tag['name']) || (false !== strpos($tag['name'], 'beta'))) {
+                        if (!isset($tag['name'])
+                            || (false !== strpos($tag['name'], 'alpha'))
+                            || (false !== strpos($tag['name'], 'beta'))
+                        ) {
                             continue;
                         }
 
@@ -122,7 +130,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
         if ($isIssueExist) {
             $details[] =
                 (string)__(
-                    'Please update Magento to the latest version %1, you use %2 <a target="_blank" href="https://magefan.com/blog/update-magento-2">%3</a>.',
+                    'Please update Magento to the latest version %1, you use %2 '.
+                    '<a target="_blank" href="https://magefan.com/blog/update-magento-2">%3</a>.',
                     $latestMagentoVersion,
                     $currentMagentoVersion,
                     __('Update')
@@ -146,6 +155,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Get details
+     *
      * @return array
      */
     public function getDetails(): array
@@ -158,6 +169,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -166,6 +179,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -174,6 +189,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -182,6 +199,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -190,12 +209,14 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
             ? (string)__('Ensure all latest security patches and performance improvements are applied.')
-            : (string)__(self::RESOLVED_MESSAGE);
+            : $this->getResolvedMessage();
     }
 }

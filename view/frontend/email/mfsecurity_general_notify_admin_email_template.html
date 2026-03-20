@@ -1,0 +1,26 @@
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<!--@subject {{trans "New Security Issue(s) Detected"}} @-->
+<!--@vars {
+"var store_name":"Store Name",
+"var store_url":"Store URL",
+"var issues":"List of new security issues"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "Hello,"}}</p>
+
+<p>{{trans "The Magefan Security extension has detected the following new security issue(s) on"}} <strong>{{var store_name}}</strong> ({{var store_url}}):</p>
+
+{{block class='Magento\Framework\View\Element\Template' area='frontend' template='Magefan_Security::email/security_issues.phtml' issues=$issues}}
+
+<p>{{trans "Please log in to the admin dashboard and review the Security Dashboard to resolve these issues."}}</p>
+
+<p>— {{trans "Magefan Security"}}</p>
+
+{{template config_path="design/email/footer_template"}}

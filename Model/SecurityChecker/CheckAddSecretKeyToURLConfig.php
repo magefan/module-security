@@ -45,7 +45,7 @@ class CheckAddSecretKeyToURLConfig extends AbstractChecker
      * @param ScopeConfigInterface $scopeConfig
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param UrlInterface $url
-     * @param null $position
+     * @param mixed $position
      */
     public function __construct(
         ScopeConfigInterface       $scopeConfig,
@@ -61,6 +61,8 @@ class CheckAddSecretKeyToURLConfig extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -75,14 +77,19 @@ class CheckAddSecretKeyToURLConfig extends AbstractChecker
     }
 
     /**
-     * @return void
+     * Update cache
+     *
+     * @return CheckAddSecretKeyToURLConfig
      * @throws Exception
      */
     public function updateCache()
     {
+        return $this;
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -91,6 +98,8 @@ class CheckAddSecretKeyToURLConfig extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -99,6 +108,8 @@ class CheckAddSecretKeyToURLConfig extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -107,6 +118,8 @@ class CheckAddSecretKeyToURLConfig extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return int
      */
     public function getPosition(): int
@@ -115,12 +128,21 @@ class CheckAddSecretKeyToURLConfig extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Prevent unauthorized access by adding a unique key to admin URLs. Enable the "Add Secret Key to URLs" option in Stores > Configuration > Advanced > Admin > Security. %1', '<a target="_blank" href="' . $this->url->getUrl('adminhtml/system_config/edit/section/admin') . '">' . __('Change') . '</a>')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__(
+                'Prevent unauthorized access by adding a unique key to admin URLs. Enable the ' .
+                ' "Add Secret Key to URLs" option in Stores > Configuration > Advanced > Admin > Security. %1',
+                '<a target="_blank" href="' .
+                    $this->url->getUrl('adminhtml/system_config/edit/section/admin') . '">' .
+                    __('Change') .
+                '</a>'
+            )
+            : $this->getResolvedMessage();
     }
 }

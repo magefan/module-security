@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+
+<?php
+    if (!isset($escaper)) {
+        /* Compatability fix for old Magento versions */
+        $escaper = $block;
+    }
+
+    $issues = $block->getData('issues');
+?>
+
+<?php if (!empty($issues)): ?>
+<ul>
+<?php foreach ($issues as $issue): ?>
+    <li><?= $escaper->escapeHtml($issue) ?></li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>

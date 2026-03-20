@@ -45,6 +45,36 @@
                     <frontend_model>Magefan\Security\Block\Adminhtml\System\Config\Form\DisposableDomains</frontend_model>
                 </field>
             </group>
+            <group id="email_notification" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Notify Admin via Email on New Issue</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Enable</label>
+                    <comment>Send an email notification when a new security issue is detected by the cron check.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sender" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Email Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="template" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Email Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="recipients" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Email Recipients</label>
+                    <comment>Comma-separated.</comment>
+                    <validate>validate-emails</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
             <group id="report_about_files_modification" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Report About Files Modification (Extra)</label>
                 <field id="enabled" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">

@@ -23,7 +23,9 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
-     * @inheritDoc
+     * Get id
+     *
+     * @return array|mixed|null
      */
     public function getId()
     {
@@ -31,7 +33,9 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
-     * @param $id
+     * Set id
+     *
+     * @param int $id
      * @return SecurityStatusCache
      */
     public function setId($id): SecurityStatusCache
@@ -40,6 +44,8 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -48,6 +54,8 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
+     * Set code
+     *
      * @param string $code
      * @return SecurityStatusCache
      */
@@ -57,6 +65,8 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function getIssueExists(): int
@@ -65,6 +75,8 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
+     * Set if issue exist
+     *
      * @param int $issueExists
      * @return SecurityStatusCache
      */
@@ -74,6 +86,8 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
+     * Get details
+     *
      * @return string
      */
     public function getDetails(): string
@@ -82,6 +96,8 @@ class SecurityStatusCache extends AbstractModel implements SecurityStatusInterfa
     }
 
     /**
+     * Set details
+     *
      * @param string $details
      * @return SecurityStatusCache
      */

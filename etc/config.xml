@@ -13,6 +13,12 @@
                 <mfmodule>Security</mfmodule>
                 <mftype>1</mftype>
             </general>
+            <email_notification>
+                <enabled>0</enabled>
+                <sender>general</sender>
+                <template>mfsecurity_email_notification_template</template>
+                <recipients/>
+            </email_notification>
             <disposable_email_address>
                 <block_disposable_email_enabled>1</block_disposable_email_enabled>
             </disposable_email_address>

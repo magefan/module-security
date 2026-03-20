@@ -45,7 +45,7 @@ class CheckAdminAccountSharingConfig extends AbstractChecker
      * @param ScopeConfigInterface $scopeConfig
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param UrlInterface $url
-     * @param null $position
+     * @param mixed $position
      */
     public function __construct(
         ScopeConfigInterface       $scopeConfig,
@@ -61,6 +61,8 @@ class CheckAdminAccountSharingConfig extends AbstractChecker
     }
 
     /**
+     * Check if issue exist
+     *
      * @return int
      */
     public function issueExists()
@@ -75,14 +77,19 @@ class CheckAdminAccountSharingConfig extends AbstractChecker
     }
 
     /**
-     * @return void
+     * Update cache
+     *
+     * @return CheckAdminAccountSharingConfig
      * @throws Exception
      */
     public function updateCache()
     {
+        return $this;
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName(): string
@@ -91,6 +98,8 @@ class CheckAdminAccountSharingConfig extends AbstractChecker
     }
 
     /**
+     * Get code
+     *
      * @return string
      */
     public function getCode(): string
@@ -99,6 +108,8 @@ class CheckAdminAccountSharingConfig extends AbstractChecker
     }
 
     /**
+     * Get type
+     *
      * @return int
      */
     public function getType(): int
@@ -107,6 +118,8 @@ class CheckAdminAccountSharingConfig extends AbstractChecker
     }
 
     /**
+     * Get position
+     *
      * @return mixed|null
      */
     public function getPosition(): int
@@ -115,12 +128,23 @@ class CheckAdminAccountSharingConfig extends AbstractChecker
     }
 
     /**
+     * Get suggestions
+     *
      * @return string
      */
     public function getSuggestions(): string
     {
         return $this->issueExists != SecurityCheckerInterface::OK
-            ? (string)__('Prevent multiple users from sharing the same admin account. Disable the "Admin Account Sharing" option in Stores > Configuration > Advanced > Admin > Security > Admin Account Sharing. %1', '<a target="_blank" href="' . $this->url->getUrl('adminhtml/system_config/edit/section/admin') . '">' . __('Change') . '</a>')
-            : (string)__(self::RESOLVED_MESSAGE);
+            ? (string)__(
+                'Prevent multiple users from sharing the same admin account. '
+                . 'Disable the "Admin Account Sharing" option in '
+                . 'Stores > Configuration > Advanced > Admin > Security > Admin Account Sharing. %1',
+                sprintf(
+                    '<a target="_blank" href="%s">%s</a>',
+                    $this->url->getUrl('adminhtml/system_config/edit/section/admin'),
+                    __('Change')
+                )
+            )
+            : $this->getResolvedMessage();
     }
 }
