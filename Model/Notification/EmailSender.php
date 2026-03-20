@@ -116,10 +116,6 @@ class EmailSender
 
             $transportBuilder->getTransport()->sendMessage();
         } catch (\Exception $e) {
-
-            var_dump($e->getMessage());
-            echo 'aaaaaaaaaaaa';exit();
-
             $this->logger->error(
                 'Magefan Security: failed to send issue notification email. ' . $e->getMessage()
             );
