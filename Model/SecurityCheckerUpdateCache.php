@@ -32,7 +32,7 @@ class SecurityCheckerUpdateCache implements SecurityCheckerUpdateCacheInterface
      */
     public function __construct(
         Json                         $json,
-        SecurityCheckerPoolInterface $securityCheckerPool,
+        SecurityCheckerPoolInterface $securityCheckerPool
     ) {
         $this->json = $json;
         $this->securityCheckerPool = $securityCheckerPool;
