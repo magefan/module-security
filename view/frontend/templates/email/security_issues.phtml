@@ -4,13 +4,24 @@
  * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
-$issues = $block->getData('issues');
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
+
+<?php
+    if (!isset($escaper)) {
+        /* Compatability fix for old Magento versions */
+        $escaper = $block;
+    }
+
+    $issues = $block->getData('issues');
+?>
+
 <?php if (!empty($issues)): ?>
 <ul>
 <?php foreach ($issues as $issue): ?>
-    <li><?= $block->escapeHtml($issue) ?></li>
+    <li><?= $escaper->escapeHtml($issue) ?></li>
 <?php endforeach; ?>
 </ul>
 <?php endif; ?>
