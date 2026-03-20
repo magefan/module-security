@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+$issues = $block->getData('issues');
+?>
+<?php if (!empty($issues)): ?>
+<ul>
+<?php foreach ($issues as $issue): ?>
+    <li><?= $block->escapeHtml($issue) ?></li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="mfsecurity_email_notification_template" label="Magefan Security Issue Notification" file="mfsecurity_general_notify_admin_email_template.html" type="html" module="Magefan_Security" area="frontend"/>
+</config>
