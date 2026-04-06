@@ -15,6 +15,7 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Shell;
+use Magento\Framework\Exception\LocalizedException;
 
 class CheckMagentoPermission extends AbstractChecker
 {
@@ -112,9 +113,26 @@ class CheckMagentoPermission extends AbstractChecker
         $findExecPhp = "find $magentoDir -type f -name '*.php' -perm -111";
 
         // Execute the commands
+        try {
         $filesOutput = $this->shell->execute($findFiles);
+        } catch (LocalizedException $e) {
+            $previous = $e->getPrevious();
+            $filesOutput   = $previous->getMessage();
+        }
+
+        try {
         $dirsOutput = $this->shell->execute($findDirs);
+        }  catch (LocalizedException $e) {
+            $previous = $e->getPrevious();
+            $dirsOutput   = $previous->getMessage();
+        }
+
+        try {
         $execPhpOutput = $this->shell->execute($findExecPhp);
+        }  catch (LocalizedException $e) {
+            $previous = $e->getPrevious();
+            $execPhpOutput   = $previous->getMessage();
+        }
 
         // Output results
         if ($filesOutput) {
