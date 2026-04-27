@@ -119,9 +119,6 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
             return $this;
         }
 
-        $this->curl->setOption(CURLOPT_CONNECTTIMEOUT, 5);
-        $this->curl->setTimeout(10);
-
         $accessibleFoldersAndFiles = [];
         foreach ($filesToCheck as $file) {
             $fileUrl = $webUrl . $file;
