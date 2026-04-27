@@ -94,6 +94,8 @@ class CheckMagentoAndPhpVersion extends AbstractChecker
         $latestMagentoVersion = 'none';
 
         try {
+            $this->curl->setOption(CURLOPT_CONNECTTIMEOUT, 5);
+            $this->curl->setTimeout(10);
             $this->curl->addHeader('User-Agent', 'PHP');
             $this->curl->get("https://api.github.com/repos/magento/magento2/tags");
             $response = $this->curl->getBody();

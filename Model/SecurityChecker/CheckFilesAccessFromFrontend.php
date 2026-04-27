@@ -113,7 +113,15 @@ class CheckFilesAccessFromFrontend extends AbstractChecker
             'bin/magento',
         ];
 
-        $webUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_WEB);
+        try {
+            $webUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_WEB);
+        } catch (\Exception $e) {
+            return $this;
+        }
+
+        $this->curl->setOption(CURLOPT_CONNECTTIMEOUT, 5);
+        $this->curl->setTimeout(10);
+
         $accessibleFoldersAndFiles = [];
         foreach ($filesToCheck as $file) {
             $fileUrl = $webUrl . $file;
