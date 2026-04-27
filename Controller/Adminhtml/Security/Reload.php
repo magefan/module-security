@@ -16,6 +16,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\App\Action\Context;
 use Magefan\Security\Model\Config;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Shell;
 
 class Reload extends \Magento\Backend\App\Action
 {
@@ -50,6 +51,11 @@ class Reload extends \Magento\Backend\App\Action
     private $config;
 
     /**
+     * @var Shell
+     */
+    private $shell;
+
+    /**
      * @param SecurityCheckerUpdateCacheInterface $securityCheckerUpdateCache
      * @param SecurityCheckerPoolInterface $securityCheckerPool
      * @param CacheInterface $cache
@@ -57,6 +63,7 @@ class Reload extends \Magento\Backend\App\Action
      * @param PageFactory $resultPageFactory
      * @param Config $config
      * @param Context $context
+     * @param Shell $shell
      */
     public function __construct(
         SecurityCheckerUpdateCacheInterface $securityCheckerUpdateCache,
@@ -65,7 +72,8 @@ class Reload extends \Magento\Backend\App\Action
         Json                                $json,
         PageFactory                         $resultPageFactory,
         Config                              $config,
-        Context                             $context
+        Context                             $context,
+        Shell                               $shell
     ) {
         $this->securityCheckerUpdateCache = $securityCheckerUpdateCache;
         $this->securityCheckerPool = $securityCheckerPool;
@@ -73,6 +81,7 @@ class Reload extends \Magento\Backend\App\Action
         $this->json = $json;
         $this->resultPageFactory = $resultPageFactory;
         $this->config = $config;
+        $this->shell = $shell;
         parent::__construct($context);
     }
 
@@ -126,9 +135,7 @@ class Reload extends \Magento\Backend\App\Action
     }
 
     /**
-     * Run the security refresh as a background CLI process so the HTTP
-     * response returns immediately (avoids gateway timeouts on Cloudflare/nginx).
-     * Falls back to synchronous execution when exec() is not available.
+     * Run the security refresh via the Magento CLI using Shell.
      *
      * @param string|null $code
      * @param string|null $token
@@ -136,17 +143,6 @@ class Reload extends \Magento\Backend\App\Action
      */
     private function dispatchBackgroundRefresh($code, $token)
     {
-        if (!function_exists('exec')) {
-            try {
-                $this->securityCheckerUpdateCache->execute($code, $token);
-            } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage(
-                    __('Security status update failed: %1', $e->getMessage())
-                );
-            }
-            return;
-        }
-
         $phpBin = PHP_BINARY;
         if (empty($phpBin) || false !== stripos(basename($phpBin), 'fpm')) {
             $phpBin = PHP_BINDIR . DIRECTORY_SEPARATOR . 'php';
@@ -154,18 +150,26 @@ class Reload extends \Magento\Backend\App\Action
                 $phpBin = 'php';
             }
         }
-        $php  = escapeshellarg($phpBin);
-        $mage = escapeshellarg(BP . '/bin/magento');
-        $cmd  = $php . ' ' . $mage . ' mfsecurity:refresh';
+
+        $cmd  = '%s %s mfsecurity:refresh';
+        $args = [$phpBin, BP . '/bin/magento'];
 
         if ($code) {
-            $cmd .= ' --code=' . escapeshellarg($code);
+            $cmd    .= ' --code=%s';
+            $args[] = $code;
         }
         if ($token) {
-            $cmd .= ' --token=' . escapeshellarg($token);
+            $cmd    .= ' --token=%s';
+            $args[] = $token;
         }
 
-        exec($cmd . ' > /dev/null 2>&1 &');
+        try {
+            $this->shell->execute($cmd . ' > /dev/null 2>&1 &', $args);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(
+                __('Security status update failed: %1', $e->getMessage())
+            );
+        }
     }
 
     /**
