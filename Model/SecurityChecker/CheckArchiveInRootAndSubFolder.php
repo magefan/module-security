@@ -161,6 +161,9 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         }
 
         $realPath = $current->getRealPath();
+        if (!is_string($realPath)) {
+            return false;
+        }
         $rootFolder = $this->directoryList->getRoot();
 
         if (strpos($realPath, $rootFolder . '/pub/media/downloadable/') === 0 ||
