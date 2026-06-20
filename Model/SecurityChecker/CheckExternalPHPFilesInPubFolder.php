@@ -105,7 +105,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($pubFolder, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::CATCH_GET_CHILD
         );
 
         foreach ($iterator as $file) {
