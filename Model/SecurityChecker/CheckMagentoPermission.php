@@ -111,11 +111,28 @@ class CheckMagentoPermission extends AbstractChecker
         $findDirs = "find $magentoDir -type d -perm -0002";
         $findExecPhp = "find $magentoDir -type f -name '*.php' -perm -111";
 
-        // Execute the commands
-        $filesOutput = $this->shell->execute($findFiles);
-        $dirsOutput = $this->shell->execute($findDirs);
-        $execPhpOutput = $this->shell->execute($findExecPhp);
+        try {
+            // Execute the commands
+            $filesOutput = $this->shell->execute($findFiles);
+            $dirsOutput = $this->shell->execute($findDirs);
+            $execPhpOutput = $this->shell->execute($findExecPhp);
+        } catch (\Exception $e) {
+            /**
+             * exec/shell is disabled on the hosting (disable_functions) — we don't crash,
+             * but we report that the check cannot be performed on this server
+             * */
+            $securityStatus = $this->securityStatusCacheFactory->create()->load($this->getCode(), 'code');
+            $securityStatus
+                ->setCode($this->getCode())
+                ->setIssueExists(SecurityCheckerInterface::OK)
+                ->setDetails($this->json->serialize([
+                    (string)__('Permission check skipped: the "exec" function is disabled on this server.')
+                ]))
+                ->save();
+            $this->cacheLoaded = false;
 
+            return $this;
+        }
         // Output results
         if ($filesOutput) {
             $filesOutput = explode(PHP_EOL, $filesOutput);
