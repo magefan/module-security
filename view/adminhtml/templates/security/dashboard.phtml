@@ -26,19 +26,14 @@ if (!isset($escaper)) {
                     <div class="page-actions-inner">
                         <div class="page-actions-buttons">
 
-                            <form
-                                class="action-element"
-                                action="<?= $escaper->escapeUrl($block->getUrl("mfsecurity/security/reload")) ?>"
-                                method="get"
+                            <button
+                                class="action-primary mfsecurity-refresh-trigger"
+                                type="button"
+                                title="<?= $escaper->escapeHtml(__('Reload Data')) ?>"
+                                data-reload-url="<?= $escaper->escapeUrl($block->getUrl('mfsecurity/security/reload')) ?>"
                             >
-                                <button
-                                    class="action-primary"
-                                    type="submit" title="<?= $escaper->escapeHtml(__('Reload Data')) ?>"
-                                    onclick="document.body.dispatchEvent(new CustomEvent('processStart'));"
-                                >
-                                    <?= $escaper->escapeHtml(__('Refresh')) ?>
-                                </button>
-                            </form>
+                                <?= $escaper->escapeHtml(__('Refresh')) ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -203,8 +198,10 @@ if (!isset($escaper)) {
                         <?php
                             $urlReload = $block->getUrl("mfsecurity/security/reload", ['code' => $item->getCode()]);
                         ?>
-                        <a href="<?= $escaper->escapeUrl($urlReload) ?>"
-                           onclick="document.body.dispatchEvent(new CustomEvent('processStart'));"
+                        <a href="#"
+                           class="mfsecurity-refresh-trigger"
+                           data-reload-url="<?= $escaper->escapeUrl($block->getUrl('mfsecurity/security/reload')) ?>"
+                           data-code="<?= $escaper->escapeHtmlAttr($item->getCode()) ?>"
                         >
                             <?= $escaper->escapeHtml(__('Refresh')) ?>
                         </a>
@@ -243,9 +240,82 @@ if (!isset($escaper)) {
     require(
         [
             'jquery',
-            'Magento_Ui/js/modal/modal'
+            'Magento_Ui/js/modal/modal',
+            'mage/translate'
         ],
-        function ($, modal) {
+        function ($, modal, \$t) {
+
+            /* ── Progress-bar refresh ───────────────────────────────── */
+            var pollTimer = null;
+
+            function openProgressModal() {
+                var \$wrap = $('<div class=\"mfsecurity-progress-wrap\">' +
+                    '<p class=\"mfsecurity-progress-msg\">' + \$t('Running security checks, please wait…') + '</p>' +
+                    '<div class=\"mfsecurity-pb-track\"><div class=\"mfsecurity-pb-fill\"></div></div>' +
+                    '<p class=\"mfsecurity-pb-pct\">0%</p>' +
+                    '</div>');
+
+                modal({
+                    title: \$t('Refreshing Security Status'),
+                    type: 'popup',
+                    responsive: true,
+                    buttons: []
+                }, \$wrap);
+
+                \$wrap.modal('openModal');
+                return \$wrap;
+            }
+
+            function setProgress(\$wrap, pct) {
+                \$wrap.find('.mfsecurity-pb-fill').css('width', pct + '%');
+                \$wrap.find('.mfsecurity-pb-pct').text(pct + '%');
+            }
+
+            function pollStatus(\$wrap, statusUrl) {
+                pollTimer = setInterval(function () {
+                    $.getJSON(statusUrl)
+                        .done(function (data) {
+                            setProgress(\$wrap, data.percent || 0);
+                            if (data.complete) {
+                                clearInterval(pollTimer);
+                                setProgress(\$wrap, 100);
+                                setTimeout(function () { window.location.reload(); }, 600);
+                            }
+                        })
+                        .fail(function () {
+                            clearInterval(pollTimer);
+                            window.location.reload();
+                        });
+                }, 2000);
+            }
+
+            $(document).on('click', '.mfsecurity-refresh-trigger', function (e) {
+                e.preventDefault();
+                var reloadUrl = $(this).data('reload-url');
+                var code      = $(this).data('code') || '';
+                var postData  = {form_key: window.FORM_KEY};
+                if (code) { postData.code = code; }
+
+                var \$wrap = openProgressModal();
+
+                $.ajax({
+                    url:      reloadUrl,
+                    type:     'POST',
+                    data:     postData,
+                    dataType: 'json',
+                    headers:  {'X-Requested-With': 'XMLHttpRequest'}
+                }).done(function (data) {
+                    if (data.status_url) {
+                        pollStatus(\$wrap, data.status_url);
+                    } else {
+                        window.location.reload();
+                    }
+                }).fail(function () {
+                    window.location.reload();
+                });
+            });
+            /* ── End progress-bar refresh ───────────────────────────── */
+
             $(document).ready(function () {
                 $('div.detail.item a.view').on('click', function (aEl) {
                     let detailId = aEl.target.dataset.id;
