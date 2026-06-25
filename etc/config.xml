@@ -25,6 +25,9 @@
             <report_about_files_modification>
                 <enabled>0</enabled>
             </report_about_files_modification>
+            <file_scan>
+                <excluded_paths/>
+            </file_scan>
         </mfsecurity>
     </default>
 </config>
