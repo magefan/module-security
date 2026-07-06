@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magefan\Security\Model\SecurityChecker;
 
+use Magefan\Security\Model\ExcludedPathChecker;
 use Magefan\Security\Model\SecurityStatusCacheFactory;
 use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -51,6 +52,11 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     private $securityStatusCacheFactory;
 
     /**
+     * @var ExcludedPathChecker
+     */
+    private $excludedPathChecker;
+
+    /**
      * @var string[]
      */
     private $exclude = [
@@ -65,6 +71,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
      * @param File $file
      * @param Json $json
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
+     * @param ExcludedPathChecker $excludedPathChecker
      * @param mixed $position
      */
     public function __construct(
@@ -72,12 +79,14 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         File                       $file,
         Json                       $json,
         SecurityStatusCacheFactory $securityStatusCacheFactory,
-        $position = null
+        ExcludedPathChecker        $excludedPathChecker,
+                                   $position = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
         $this->json = $json;
         $this->securityStatusCacheFactory = $securityStatusCacheFactory;
+        $this->excludedPathChecker = $excludedPathChecker;
         $this->position = $position;
         parent::__construct($securityStatusCacheFactory);
     }
@@ -102,9 +111,9 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
     public function updateCache()
     {
         $rootFolder = $this->directoryList->getRoot();
-/*        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS)
-        );*/
+        /*        $iterator = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS)
+                );*/
         $directoryIterator = new \RecursiveDirectoryIterator(
             $rootFolder,
             \FilesystemIterator::SKIP_DOTS
@@ -123,7 +132,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         foreach ($iterator as $file) {
             $fileInfo = $this->file->getPathInfo($file->getPathName());
             if ($file->isFile() && isset($fileInfo['extension']) && $fileInfo['extension'] == 'sql') {
-                if (!$this->isExcluded($file->getPathname())) {
+                if (!$this->excludedPathChecker->isExcluded($file->getPathname(), $this->exclude)) {
                     $sqlPathFiles[] = $file->getPathname();
                 }
             }
@@ -160,26 +169,6 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         }
 
         return true;
-    }
-
-    /**
-     * Check if excluded
-     *
-     * @param string $path
-     * @return bool
-     */
-    private function isExcluded(string $path): bool
-    {
-        $result = false;
-
-        foreach ($this->exclude as $excludePath) {
-            if (strpos($path, $this->directoryList->getRoot() . '/' . $excludePath) === 0) {
-                $result = true;
-                break;
-            }
-        }
-
-        return $result;
     }
 
     /**
