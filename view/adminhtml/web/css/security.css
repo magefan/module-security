@@ -3,6 +3,41 @@
   * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
   */
 
+/* ── Refresh progress modal ──────────────────────────────────────── */
+.mfsecurity-progress-wrap {
+    padding: 16px 8px 8px;
+    min-width: 320px;
+}
+
+.mfsecurity-progress-msg {
+    margin-bottom: 14px;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.mfsecurity-pb-track {
+    width: 100%;
+    height: 12px;
+    background: #e9e9e9;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.mfsecurity-pb-fill {
+    height: 100%;
+    width: 0;
+    background: #1979c3;
+    border-radius: 6px;
+    transition: width 0.4s ease;
+}
+
+.mfsecurity-pb-pct {
+    margin-top: 8px;
+    text-align: right;
+    font-size: 1.2rem;
+    color: #666;
+}
+
      .reload-chart-container {
          width: 100%;
          height: 50px;
