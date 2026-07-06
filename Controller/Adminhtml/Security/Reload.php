@@ -17,6 +17,7 @@ use Magento\Backend\App\Action\Context;
 use Magefan\Security\Model\Config;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Shell;
+use Magefan\Security\Console\Command\RefreshCommand;
 
 class Reload extends \Magento\Backend\App\Action
 {
@@ -151,7 +152,7 @@ class Reload extends \Magento\Backend\App\Action
             }
         }
 
-        $cmd  = '%s %s mfsecurity:refresh';
+        $cmd  = '%s %s ' . RefreshCommand::COMMAND_NAME;
         $args = [$phpBin, BP . '/bin/magento'];
 
         if ($code) {

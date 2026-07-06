@@ -62,7 +62,7 @@ class ExcludedPathChecker
                 continue;
             }
             /** Exact file match, or directory-prefix match. */
-            if ($absolutePath === $pattern || str_starts_with($absolutePath, $pattern . '/')) {
+            if ($absolutePath === $pattern || strpos($absolutePath, $pattern . '/') === 0) {
                 return true;
             }
         }
