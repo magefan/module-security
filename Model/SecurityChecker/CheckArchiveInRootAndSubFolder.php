@@ -113,7 +113,11 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
 
         $filterIterator = new \RecursiveCallbackFilterIterator($directoryIterator, [$this, 'filterCallback']);
 
-        $iterator = new \RecursiveIteratorIterator($filterIterator);
+        $iterator = new \RecursiveIteratorIterator(
+            $filterIterator,
+            \RecursiveIteratorIterator::LEAVES_ONLY,
+            \RecursiveIteratorIterator::CATCH_GET_CHILD
+        );
 
         $archives = [];
 

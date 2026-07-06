@@ -112,9 +112,9 @@ class CheckMagentoPermission extends AbstractChecker
         $findExecPhp = "find $magentoDir -type f -name '*.php' -perm -111";
 
         // Execute the commands
-        $filesOutput = $this->shell->execute($findFiles);
-        $dirsOutput = $this->shell->execute($findDirs);
-        $execPhpOutput = $this->shell->execute($findExecPhp);
+        $filesOutput = $this->executeFindCommand($findFiles);
+        $dirsOutput = $this->executeFindCommand($findDirs);
+        $execPhpOutput = $this->executeFindCommand($findExecPhp);
 
         // Output results
         if ($filesOutput) {
@@ -211,6 +211,37 @@ class CheckMagentoPermission extends AbstractChecker
         }
 
         return $this->details;
+    }
+
+    /**
+     * Execute a find command, silently dropping "Permission denied" lines.
+     *
+     * Shell::execute() throws when find exits non-zero (which happens whenever
+     * it encounters an unreadable directory). The full output is still available
+     * as the previous exception message, so we extract it and strip the error lines.
+     *
+     * @param string $command
+     * @return string
+     */
+    private function executeFindCommand(string $command): string
+    {
+        try {
+            return $this->shell->execute($command);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $prev = $e->getPrevious();
+            if (!$prev) {
+                throw $e;
+            }
+            $output = $prev->getMessage();
+            if (strpos($output, 'Permission denied') === false) {
+                throw $e;
+            }
+            $lines = explode(PHP_EOL, $output);
+            $lines = array_filter($lines, function ($line) {
+                return strpos($line, 'Permission denied') === false && trim($line) !== '';
+            });
+            return implode(PHP_EOL, $lines);
+        }
     }
 
     /**
