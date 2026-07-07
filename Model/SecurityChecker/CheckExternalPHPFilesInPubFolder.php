@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magefan\Security\Model\SecurityChecker;
 
+use Magefan\Security\Model\ExcludedPathChecker;
 use Magefan\Security\Model\SecurityStatusCacheFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magefan\Security\Api\SecurityCheckerInterface;
@@ -51,10 +52,16 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     private $json;
 
     /**
+     * @var ExcludedPathChecker
+     */
+    private $excludedPathChecker;
+
+    /**
      * @param DirectoryList $directoryList
      * @param File $file
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
+     * @param ExcludedPathChecker $excludedPathChecker
      * @param mixed $position
      */
     public function __construct(
@@ -62,12 +69,14 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
         File                       $file,
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json                       $json,
-        $position = null
+        ExcludedPathChecker        $excludedPathChecker,
+                                   $position = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
         $this->securityStatusCacheFactory = $securityStatusCacheFactory;
         $this->json = $json;
+        $this->excludedPathChecker = $excludedPathChecker;
         $this->position = $position;
         parent::__construct($securityStatusCacheFactory);
     }
@@ -117,6 +126,10 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
             $fileInfo = $this->file->getPathInfo($file->getPathName());
 
             if (!isset($fileInfo['extension']) || $fileInfo['extension'] !== 'php') {
+                continue;
+            }
+
+            if ($this->excludedPathChecker->isExcluded($file->getPathName())) {
                 continue;
             }
 

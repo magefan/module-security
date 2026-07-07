@@ -42,6 +42,11 @@ class Config
     public const XML_PATH_NOTIFY_ADMIN_EMAIL_RECIPIENTS = 'mfsecurity/email_notification/recipients';
 
     /**
+     * Paths excluded from the file scan checks config path
+     */
+    public const XML_PATH_FILE_SCAN_EXCLUDED_PATHS = 'mfsecurity/file_scan/excluded_paths';
+
+    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -124,6 +129,26 @@ class Config
             self::XML_PATH_NOTIFY_ADMIN_EMAIL_RECIPIENTS,
             $storeId
         );
+    }
+
+    /**
+     * Get the user-defined paths excluded from the file scan checks.
+     * One path per line in config; returns a trimmed list with blank lines dropped.
+     *
+     * @param mixed $storeId
+     * @return string[]
+     */
+    public function getFileScanExcludedPaths($storeId = null): array
+    {
+        $raw = (string)$this->getConfig(
+            self::XML_PATH_FILE_SCAN_EXCLUDED_PATHS,
+            $storeId
+        );
+
+        return array_values(array_filter(array_map(
+            'trim',
+            preg_split('/[\r\n]+/', $raw) ?: []
+        )));
     }
 
     /**

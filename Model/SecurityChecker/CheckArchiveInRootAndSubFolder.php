@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magefan\Security\Model\SecurityChecker;
 
+use Magefan\Security\Model\ExcludedPathChecker;
 use Magefan\Security\Model\SecurityStatusCacheFactory;
 use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -51,6 +52,11 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     private $json;
 
     /**
+     * @var ExcludedPathChecker
+     */
+    private $excludedPathChecker;
+
+    /**
      * @var string[]
      */
     private $exclude = [
@@ -65,6 +71,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
      * @param File $file
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
+     * @param ExcludedPathChecker $excludedPathChecker
      * @param mixed $position
      */
     public function __construct(
@@ -72,12 +79,14 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         File                       $file,
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json                       $json,
-        $position = null
+        ExcludedPathChecker        $excludedPathChecker,
+                                   $position = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
         $this->securityStatusCacheFactory = $securityStatusCacheFactory;
         $this->json = $json;
+        $this->excludedPathChecker = $excludedPathChecker;
         $this->position = $position;
         parent::__construct($securityStatusCacheFactory);
     }
@@ -103,9 +112,9 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
     {
         $rootFolder = $this->directoryList->getRoot();
         $archiveExtensions = ['zip', 'tar', 'gz', 'tgz', 'tar.gz'];
-/*        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS)
-        );*/
+        /*        $iterator = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($rootFolder, \FilesystemIterator::SKIP_DOTS)
+                );*/
         $directoryIterator = new \RecursiveDirectoryIterator(
             $rootFolder,
             \FilesystemIterator::SKIP_DOTS
@@ -127,7 +136,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
                 if (isset($fileInfo['extension']) &&
                     in_array(strtolower($fileInfo['extension'] ?? ''), $archiveExtensions)
                 ) {
-                    if (!$this->isExcluded($file->getPathname())) {
+                    if (!$this->excludedPathChecker->isExcluded($file->getPathname(), $this->exclude)) {
                         $archives[] = $file->getPathname();
                     }
                 }
@@ -165,6 +174,10 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         }
 
         $realPath = $current->getRealPath();
+        if ($realPath === false) {
+            return false;
+        }
+
         $rootFolder = $this->directoryList->getRoot();
 
         if (strpos($realPath, $rootFolder . '/pub/media/downloadable/') === 0 ||
@@ -174,26 +187,6 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         }
 
         return true;
-    }
-
-    /**
-     * Check if excluded
-     *
-     * @param string $path
-     * @return bool
-     */
-    private function isExcluded(string $path): bool
-    {
-        $result = false;
-
-        foreach ($this->exclude as $excludePath) {
-            if (strpos($path, $this->directoryList->getRoot() . '/' . $excludePath) === 0) {
-                $result = true;
-                break;
-            }
-        }
-
-        return $result;
     }
 
     /**
