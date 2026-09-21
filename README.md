@@ -1,4 +1,4 @@
-# [Magento 2 Security Extension](https://magefan.com/magento-2-security-extension) Free |  Security Check
+# [Magento 2 Security Extension](https://magefan.com/magento-2-security-extension) Free by Magefan
 
 [![Total Downloads](https://poser.pugx.org/magefan/module-security/downloads)](https://packagist.org/packages/magefan/module-security)
 [![Latest Stable Version](https://poser.pugx.org/magefan/module-security/v/stable)](https://packagist.org/packages/magefan/module-security)
