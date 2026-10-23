@@ -71,6 +71,8 @@ class Status extends Action
     }
 
     /**
+     * Check if admin has permissions to visit this page
+     *
      * @return bool
      */
     protected function _isAllowed()

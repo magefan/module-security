@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magefan\Security\Model;
 
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File;
 
 class ExcludedPathChecker
 {
@@ -23,15 +24,23 @@ class ExcludedPathChecker
     private $config;
 
     /**
+     * @var File
+     */
+    private $fileDriver;
+
+    /**
      * @param DirectoryList $directoryList
      * @param Config $config
+     * @param File $fileDriver
      */
     public function __construct(
         DirectoryList $directoryList,
-        Config $config
+        Config $config,
+        File $fileDriver
     ) {
         $this->directoryList = $directoryList;
         $this->config = $config;
+        $this->fileDriver = $fileDriver;
     }
 
     /**
@@ -43,7 +52,7 @@ class ExcludedPathChecker
      */
     public function isExcluded(string $absolutePath, array $extraExcludes = []): bool
     {
-        $absolutePath = realpath($absolutePath);
+        $absolutePath = $this->fileDriver->getRealPath($absolutePath);
         if ($absolutePath === false) {
             return false;
         }
@@ -56,8 +65,8 @@ class ExcludedPathChecker
                 continue;
             }
             /** Relative entries are anchored to the Magento root; non-existing paths are skipped. */
-            $pattern = realpath($this->directoryList->getRoot() . '/' . ltrim($pattern, '/'))
-                ?: realpath($pattern);
+            $rootPath = $this->directoryList->getRoot() . '/' . ltrim($pattern, '/');
+            $pattern = $this->fileDriver->getRealPath($rootPath) ?: $this->fileDriver->getRealPath($pattern);
             if ($pattern === false) {
                 continue;
             }

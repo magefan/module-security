@@ -80,7 +80,7 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
         Json                       $json,
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         ExcludedPathChecker        $excludedPathChecker,
-                                   $position = null
+        $position = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;

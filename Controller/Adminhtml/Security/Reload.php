@@ -145,8 +145,10 @@ class Reload extends \Magento\Backend\App\Action
     private function dispatchBackgroundRefresh($code, $token)
     {
         $phpBin = PHP_BINARY;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction -- no framework alternative for binary name check
         if (empty($phpBin) || false !== stripos(basename($phpBin), 'fpm')) {
             $phpBin = PHP_BINDIR . DIRECTORY_SEPARATOR . 'php';
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction -- no framework alternative for executable check
             if (!is_executable($phpBin)) {
                 $phpBin = 'php';
             }

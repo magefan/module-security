@@ -80,7 +80,7 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json                       $json,
         ExcludedPathChecker        $excludedPathChecker,
-                                   $position = null
+        $position = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;

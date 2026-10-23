@@ -133,6 +133,7 @@ class Config
 
     /**
      * Get the user-defined paths excluded from the file scan checks.
+     *
      * One path per line in config; returns a trimmed list with blank lines dropped.
      *
      * @param mixed $storeId
