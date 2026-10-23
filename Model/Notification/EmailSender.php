@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magefan\Security\Model\Notification;
 
+use Magefan\Community\Api\GetModuleInfoInterface;
 use Magefan\Security\Model\Config;
 use Magento\Framework\App\Area;
 use Magento\Framework\Mail\Template\TransportBuilderFactory;
@@ -50,12 +51,18 @@ class EmailSender
     private $logger;
 
     /**
+     * @var GetModuleInfoInterface
+     */
+    private $getModuleInfo;
+
+    /**
      * @param Config $config
      * @param TransportBuilderFactory $transportBuilderFactory
      * @param StateInterface $inlineTranslation
      * @param Emulation $emulation
      * @param StoreManagerInterface $storeManager
      * @param LoggerInterface $logger
+     * @param GetModuleInfoInterface $getModuleInfo
      */
     public function __construct(
         Config $config,
@@ -63,7 +70,8 @@ class EmailSender
         StateInterface $inlineTranslation,
         Emulation $emulation,
         StoreManagerInterface $storeManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        GetModuleInfoInterface $getModuleInfo
     ) {
         $this->config = $config;
         $this->transportBuilderFactory = $transportBuilderFactory;
@@ -71,6 +79,7 @@ class EmailSender
         $this->emulation = $emulation;
         $this->storeManager = $storeManager;
         $this->logger = $logger;
+        $this->getModuleInfo = $getModuleInfo;
     }
 
     /**
@@ -107,6 +116,8 @@ class EmailSender
                     'store_name' => $store->getName(),
                     'store_url'  => $store->getBaseUrl(),
                     'issues'     => $newIssueNames,
+                    'module_url' => (string)($this->getModuleInfo->execute('Magefan_Security')->getProductUrl()
+                        ?: 'https://magefan.com/'),
                 ])
                 ->setFromByScope($this->config->getNotificationEmailSender());
 
