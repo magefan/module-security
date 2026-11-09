@@ -157,7 +157,8 @@ class Reload extends \Magento\Backend\App\Action
             }
         }
 
-        $cmd  = '%s %s ' . RefreshCommand::COMMAND_NAME;
+        // File scans need more memory than the CLI default on many hosts (e.g. 128M on Plesk)
+        $cmd  = '%s -d memory_limit=2G %s ' . RefreshCommand::COMMAND_NAME;
         $args = [$phpBin, BP . '/bin/magento'];
 
         if ($code) {
