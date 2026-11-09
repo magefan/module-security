@@ -148,8 +148,11 @@ class Reload extends \Magento\Backend\App\Action
         // phpcs:ignore Magento2.Functions.DiscouragedFunction -- no framework alternative for binary name check
         if (empty($phpBin) || false !== stripos(basename($phpBin), 'fpm')) {
             $phpBin = PHP_BINDIR . DIRECTORY_SEPARATOR . 'php';
+            // Under open_basedir (e.g. Plesk) the CLI binary usually cannot be checked from FPM,
+            // but exec() can still run it, so keep the same-version binary instead of "php" from PATH.
+            // @ - is_executable() emits a warning when the binary is outside open_basedir
             // phpcs:ignore Magento2.Functions.DiscouragedFunction -- no framework alternative for executable check
-            if (!is_executable($phpBin)) {
+            if (!@is_executable($phpBin) && !ini_get('open_basedir')) {
                 $phpBin = 'php';
             }
         }
