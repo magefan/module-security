@@ -168,6 +168,14 @@ class CheckSQLInRootAndSubFolder extends AbstractChecker
             return false;
         }
 
+        // Do not descend into excluded directories (e.g. pub/media/catalog/product/cache).
+        // The walk starts at the Magento root and skips symlinks, so paths here are already real.
+        if ($current->isDir()
+            && $this->excludedPathChecker->isExcludedRealPath($current->getPathname(), $this->exclude)
+        ) {
+            return false;
+        }
+
         return true;
     }
 
