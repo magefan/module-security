@@ -173,16 +173,20 @@ class CheckArchiveInRootAndSubFolder extends AbstractChecker
             return false;
         }
 
-        $realPath = $current->getRealPath();
-        if ($realPath === false) {
+        // The walk starts at the Magento root and skips symlinks, so the path is already real:
+        // no realpath() call per entry, which is slow on stores with millions of media files
+        $path = $current->getPathname();
+        $rootFolder = $this->directoryList->getRoot();
+
+        // Trailing slash so the directory itself is skipped, not only the files inside it
+        if (strpos($path . '/', $rootFolder . '/pub/media/downloadable/') === 0 ||
+            strpos($path . '/', $rootFolder . '/var/log/') === 0
+        ) {
             return false;
         }
 
-        $rootFolder = $this->directoryList->getRoot();
-
-        if (strpos($realPath, $rootFolder . '/pub/media/downloadable/') === 0 ||
-            strpos($realPath, $rootFolder . '/var/log/') === 0
-        ) {
+        // Do not descend into excluded directories (e.g. pub/media/catalog/product/cache)
+        if ($current->isDir() && $this->excludedPathChecker->isExcludedRealPath($path, $this->exclude)) {
             return false;
         }
 
