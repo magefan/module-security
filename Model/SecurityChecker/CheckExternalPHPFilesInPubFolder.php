@@ -15,6 +15,7 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
+use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -110,10 +111,20 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
             'errors/report.php',
         ];
         $pubFolder = $this->directoryList->getPath('pub');
+        // Iterate from the real path, so directory paths below are real and need no realpath() call each
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $pubFolder = realpath($pubFolder) ?: $pubFolder;
         $externalFiles = [];
 
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($pubFolder, RecursiveDirectoryIterator::SKIP_DOTS),
+            new RecursiveCallbackFilterIterator(
+                new RecursiveDirectoryIterator($pubFolder, RecursiveDirectoryIterator::SKIP_DOTS),
+                function ($current) {
+                    // Do not descend into excluded directories (e.g. pub/media/catalog/product/cache)
+                    return !$current->isDir()
+                        || !$this->excludedPathChecker->isExcludedRealPath($current->getPathname());
+                }
+            ),
             RecursiveIteratorIterator::SELF_FIRST,
             RecursiveIteratorIterator::CATCH_GET_CHILD
         );
