@@ -15,6 +15,8 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Shell;
+use Magento\Framework\App\ObjectManager;
+use Magefan\Security\Model\ExcludedPathChecker;
 
 class CheckMagentoPermission extends AbstractChecker
 {
@@ -55,12 +57,18 @@ class CheckMagentoPermission extends AbstractChecker
     private $shell;
 
     /**
+     * @var ExcludedPathChecker
+     */
+    private $excludedPathChecker;
+
+    /**
      * @param DirectoryList $directoryList
      * @param FileDriver $fileDriver
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
      * @param Shell $shell
      * @param mixed $position
+     * @param ExcludedPathChecker|null $excludedPathChecker
      */
     public function __construct(
         DirectoryList $directoryList,
@@ -68,7 +76,8 @@ class CheckMagentoPermission extends AbstractChecker
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json $json,
         Shell $shell,
-        $position = null
+        $position = null,
+        ?ExcludedPathChecker $excludedPathChecker = null
     ) {
         $this->directoryList = $directoryList;
         $this->fileDriver = $fileDriver;
@@ -76,6 +85,8 @@ class CheckMagentoPermission extends AbstractChecker
         $this->json = $json;
         $this->shell = $shell;
         $this->position = $position;
+        $this->excludedPathChecker = $excludedPathChecker
+            ?: ObjectManager::getInstance()->get(ExcludedPathChecker::class);
         parent::__construct($securityStatusCacheFactory);
     }
 
@@ -107,19 +118,39 @@ class CheckMagentoPermission extends AbstractChecker
         -perm -111  | Finds .php files with execute (+x) permission, which could indicate a security misconfiguration
         or webshell risk.
         */
-        $findFiles = "find $magentoDir -type f \\( -perm -0002 -o -perm 0777 \\)";
-        $findDirs = "find $magentoDir -type d -perm -0002";
-        $findExecPhp = "find $magentoDir -type f -name '*.php' -perm -111";
+        // Excluded directories are pruned, so find does not walk them (e.g. pub/media/catalog/product/cache).
+        // Patterns are tested on directories only (-type d first): testing them on every file costs more
+        // than pruning saves. Excluded single files are filtered from the output below.
+        $pruneArgs = [];
+        $pruneParts = [];
+        foreach ($this->excludedPathChecker->getExcludedRealPaths() as $excludedPath) {
+            if ($this->fileDriver->isDirectory($excludedPath)) {
+                $pruneParts[] = '-path %s';
+                $pruneArgs[] = $excludedPath;
+            }
+        }
+        $prune = $pruneParts
+            ? '\\( -type d \\( ' . implode(' -o ', $pruneParts) . ' \\) \\) -prune -o '
+            : '';
+        $args = array_merge([$magentoDir], $pruneArgs);
+
+        $findFiles = 'find %s ' . $prune . '-type f \\( -perm -0002 -o -perm 0777 \\) -print';
+        $findDirs = 'find %s ' . $prune . '-type d -perm -0002 -print';
+        $findExecPhp = 'find %s ' . $prune . "-type f -name '*.php' -perm -111 -print";
 
         // Execute the commands
-        $filesOutput = $this->executeFindCommand($findFiles);
-        $dirsOutput = $this->executeFindCommand($findDirs);
-        $execPhpOutput = $this->executeFindCommand($findExecPhp);
+        $filesOutput = $this->executeFindCommand($findFiles, $args);
+        $dirsOutput = $this->executeFindCommand($findDirs, $args);
+        $execPhpOutput = $this->executeFindCommand($findExecPhp, $args);
 
         // Output results
         if ($filesOutput) {
             $filesOutput = explode(PHP_EOL, $filesOutput);
             foreach ($filesOutput as $item) {
+                if ($this->excludedPathChecker->isExcludedRealPath($item)) {
+                    continue;
+                }
+
                 $permissionErrors[] = (string)__('File with incorrect permissions: %1 (recommend 06444)', $item);
             }
         }
@@ -134,7 +165,9 @@ class CheckMagentoPermission extends AbstractChecker
         if ($execPhpOutput) {
             $execPhpOutput = explode(PHP_EOL, $execPhpOutput);
             foreach ($execPhpOutput as $item) {
-                if (strpos($item, $magentoDir . '/generated/code') !== false) {
+                if (strpos($item, $magentoDir . '/generated/code') !== false
+                    || $this->excludedPathChecker->isExcludedRealPath($item)
+                ) {
                     continue;
                 }
 
@@ -221,12 +254,13 @@ class CheckMagentoPermission extends AbstractChecker
      * as the previous exception message, so we extract it and strip the error lines.
      *
      * @param string $command
+     * @param string[] $arguments shell-escaped and substituted for %s placeholders
      * @return string
      */
-    private function executeFindCommand(string $command): string
+    private function executeFindCommand(string $command, array $arguments = []): string
     {
         try {
-            return $this->shell->execute($command);
+            return $this->shell->execute($command, $arguments);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $prev = $e->getPrevious();
             if (!$prev) {

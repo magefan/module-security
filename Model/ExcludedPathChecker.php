@@ -90,6 +90,17 @@ class ExcludedPathChecker
     }
 
     /**
+     * Get excluded paths resolved to real absolute paths (non-existing entries are skipped)
+     *
+     * @param string[] $extraExcludes
+     * @return string[]
+     */
+    public function getExcludedRealPaths(array $extraExcludes = []): array
+    {
+        return $this->getResolvedPatterns($extraExcludes);
+    }
+
+    /**
      * Resolve exclude patterns to real paths once per extra-excludes set
      *
      * Scans call isExcluded() for every file, so resolving the patterns on each call
