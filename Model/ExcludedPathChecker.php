@@ -29,6 +29,13 @@ class ExcludedPathChecker
     private $fileDriver;
 
     /**
+     * Resolved exclude patterns, keyed by the checker-specific extra excludes
+     *
+     * @var array<string, string[]>
+     */
+    private $resolvedPatterns = [];
+
+    /**
      * @param DirectoryList $directoryList
      * @param Config $config
      * @param File $fileDriver
@@ -57,25 +64,61 @@ class ExcludedPathChecker
             return false;
         }
 
-        $patterns = array_merge($extraExcludes, $this->config->getFileScanExcludedPaths());
+        return $this->isExcludedRealPath($absolutePath, $extraExcludes);
+    }
 
-        foreach ($patterns as $pattern) {
-            $pattern = trim($pattern);
-            if ($pattern === '') {
-                continue;
-            }
-            /** Relative entries are anchored to the Magento root; non-existing paths are skipped. */
-            $rootPath = $this->directoryList->getRoot() . '/' . ltrim($pattern, '/');
-            $pattern = $this->fileDriver->getRealPath($rootPath) ?: $this->fileDriver->getRealPath($pattern);
-            if ($pattern === false) {
-                continue;
-            }
+    /**
+     * Same as isExcluded() for a path that is already resolved, without another realpath() call
+     *
+     * Use it for paths from a RecursiveDirectoryIterator started at a real path:
+     * the iterator does not descend into symlinked directories, so such paths are already real.
+     *
+     * @param string $realPath
+     * @param string[] $extraExcludes
+     * @return bool
+     */
+    public function isExcludedRealPath(string $realPath, array $extraExcludes = []): bool
+    {
+        foreach ($this->getResolvedPatterns($extraExcludes) as $pattern) {
             /** Exact file match, or directory-prefix match. */
-            if ($absolutePath === $pattern || strpos($absolutePath, $pattern . '/') === 0) {
+            if ($realPath === $pattern || strpos($realPath, $pattern . '/') === 0) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Resolve exclude patterns to real paths once per extra-excludes set
+     *
+     * Scans call isExcluded() for every file, so resolving the patterns on each call
+     * means several realpath() lookups per file (slow on stores with millions of media files).
+     *
+     * @param string[] $extraExcludes
+     * @return string[]
+     */
+    private function getResolvedPatterns(array $extraExcludes): array
+    {
+        $key = implode("\n", $extraExcludes);
+        if (isset($this->resolvedPatterns[$key])) {
+            return $this->resolvedPatterns[$key];
+        }
+
+        $resolved = [];
+        foreach (array_merge($extraExcludes, $this->config->getFileScanExcludedPaths()) as $pattern) {
+            $pattern = trim((string)$pattern);
+            if ($pattern === '') {
+                continue;
+            }
+            /** Relative entries are anchored to the Magento root; non-existing paths are skipped. */
+            $rootPath = $this->directoryList->getRoot() . '/' . ltrim($pattern, '/');
+            $realPath = $this->fileDriver->getRealPath($rootPath) ?: $this->fileDriver->getRealPath($pattern);
+            if ($realPath !== false) {
+                $resolved[] = $realPath;
+            }
+        }
+
+        return $this->resolvedPatterns[$key] = $resolved;
     }
 }

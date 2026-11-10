@@ -145,16 +145,21 @@ class Reload extends \Magento\Backend\App\Action
     private function dispatchBackgroundRefresh($code, $token)
     {
         $phpBin = PHP_BINARY;
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction -- no framework alternative for binary name check
-        if (empty($phpBin) || false !== stripos(basename($phpBin), 'fpm')) {
+        // From a web request PHP_BINARY is the SAPI binary (php-fpm, LiteSpeed lsphp, php-cgi) or empty (mod_php),
+        // none of which can run bin/magento, so use the CLI binary of the same PHP version instead
+        if (empty($phpBin) || PHP_SAPI !== 'cli') {
             $phpBin = PHP_BINDIR . DIRECTORY_SEPARATOR . 'php';
+            // Under open_basedir (e.g. Plesk) the CLI binary usually cannot be checked from FPM,
+            // but exec() can still run it, so keep the same-version binary instead of "php" from PATH.
+            // @ - is_executable() emits a warning when the binary is outside open_basedir
             // phpcs:ignore Magento2.Functions.DiscouragedFunction -- no framework alternative for executable check
-            if (!is_executable($phpBin)) {
+            if (!@is_executable($phpBin) && !ini_get('open_basedir')) {
                 $phpBin = 'php';
             }
         }
 
-        $cmd  = '%s %s ' . RefreshCommand::COMMAND_NAME;
+        // File scans need more memory than the CLI default on many hosts (e.g. 128M on Plesk)
+        $cmd  = '%s -d memory_limit=2G %s ' . RefreshCommand::COMMAND_NAME;
         $args = [$phpBin, BP . '/bin/magento'];
 
         if ($code) {

@@ -15,6 +15,9 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
+use Magento\Framework\App\ObjectManager;
+use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -57,12 +60,18 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     private $excludedPathChecker;
 
     /**
+     * @var FileDriver
+     */
+    private $fileDriver;
+
+    /**
      * @param DirectoryList $directoryList
      * @param File $file
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
      * @param ExcludedPathChecker $excludedPathChecker
      * @param mixed $position
+     * @param FileDriver|null $fileDriver
      */
     public function __construct(
         DirectoryList              $directoryList,
@@ -70,7 +79,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json                       $json,
         ExcludedPathChecker        $excludedPathChecker,
-        $position = null
+        $position = null,
+        ?FileDriver                $fileDriver = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
@@ -78,6 +88,7 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
         $this->json = $json;
         $this->excludedPathChecker = $excludedPathChecker;
         $this->position = $position;
+        $this->fileDriver = $fileDriver ?: ObjectManager::getInstance()->get(FileDriver::class);
         parent::__construct($securityStatusCacheFactory);
     }
 
@@ -110,10 +121,19 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
             'errors/report.php',
         ];
         $pubFolder = $this->directoryList->getPath('pub');
+        // Iterate from the real path, so directory paths below are real and need no realpath() call each
+        $pubFolder = $this->fileDriver->getRealPath($pubFolder) ?: $pubFolder;
         $externalFiles = [];
 
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($pubFolder, RecursiveDirectoryIterator::SKIP_DOTS),
+            new RecursiveCallbackFilterIterator(
+                new RecursiveDirectoryIterator($pubFolder, RecursiveDirectoryIterator::SKIP_DOTS),
+                function ($current) {
+                    // Do not descend into excluded directories (e.g. pub/media/catalog/product/cache)
+                    return !$current->isDir()
+                        || !$this->excludedPathChecker->isExcludedRealPath($current->getPathname());
+                }
+            ),
             RecursiveIteratorIterator::SELF_FIRST,
             RecursiveIteratorIterator::CATCH_GET_CHILD
         );
