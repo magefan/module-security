@@ -15,6 +15,8 @@ use Magefan\Security\Api\SecurityCheckerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
+use Magento\Framework\App\ObjectManager;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -58,12 +60,18 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
     private $excludedPathChecker;
 
     /**
+     * @var FileDriver
+     */
+    private $fileDriver;
+
+    /**
      * @param DirectoryList $directoryList
      * @param File $file
      * @param SecurityStatusCacheFactory $securityStatusCacheFactory
      * @param Json $json
      * @param ExcludedPathChecker $excludedPathChecker
      * @param mixed $position
+     * @param FileDriver|null $fileDriver
      */
     public function __construct(
         DirectoryList              $directoryList,
@@ -71,7 +79,8 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
         SecurityStatusCacheFactory $securityStatusCacheFactory,
         Json                       $json,
         ExcludedPathChecker        $excludedPathChecker,
-        $position = null
+        $position = null,
+        ?FileDriver                $fileDriver = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
@@ -79,6 +88,7 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
         $this->json = $json;
         $this->excludedPathChecker = $excludedPathChecker;
         $this->position = $position;
+        $this->fileDriver = $fileDriver ?: ObjectManager::getInstance()->get(FileDriver::class);
         parent::__construct($securityStatusCacheFactory);
     }
 
@@ -112,8 +122,7 @@ class CheckExternalPHPFilesInPubFolder extends AbstractChecker
         ];
         $pubFolder = $this->directoryList->getPath('pub');
         // Iterate from the real path, so directory paths below are real and need no realpath() call each
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $pubFolder = realpath($pubFolder) ?: $pubFolder;
+        $pubFolder = $this->fileDriver->getRealPath($pubFolder) ?: $pubFolder;
         $externalFiles = [];
 
         $iterator = new RecursiveIteratorIterator(
