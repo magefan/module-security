@@ -145,8 +145,9 @@ class Reload extends \Magento\Backend\App\Action
     private function dispatchBackgroundRefresh($code, $token)
     {
         $phpBin = PHP_BINARY;
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction -- no framework alternative for binary name check
-        if (empty($phpBin) || false !== stripos(basename($phpBin), 'fpm')) {
+        // From a web request PHP_BINARY is the SAPI binary (php-fpm, LiteSpeed lsphp, php-cgi) or empty (mod_php),
+        // none of which can run bin/magento, so use the CLI binary of the same PHP version instead
+        if (empty($phpBin) || PHP_SAPI !== 'cli') {
             $phpBin = PHP_BINDIR . DIRECTORY_SEPARATOR . 'php';
             // Under open_basedir (e.g. Plesk) the CLI binary usually cannot be checked from FPM,
             // but exec() can still run it, so keep the same-version binary instead of "php" from PATH.
